@@ -83,7 +83,7 @@ class BaseController extends \yii\web\Controller
     }
 
     
-    public function setError($errors)
+    public function setError()
     {
         $data = [
             'status' => 404,

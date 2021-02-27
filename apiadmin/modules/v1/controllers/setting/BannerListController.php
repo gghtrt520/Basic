@@ -1,20 +1,21 @@
 <?php
 namespace apiadmin\modules\v1\controllers\setting;
-
+ 
 use Yii;
 
 
-class MenuController extends \apiadmin\modules\v1\controllers\BaseController
+class BannerListController extends \apiadmin\modules\v1\controllers\BaseController
 {
+    
     public function actionList()
     {
-        $data  = new \apiadmin\modules\models\setting\Menu();
+        $data  = new \apiadmin\modules\models\setting\BannerList();
         return $this->setSuccess($data->queryList());
     }
-
+    
     public function actionAdd()
     {
-        $data  = new \apiadmin\modules\models\setting\Menu();
+        $data  = new \apiadmin\modules\models\setting\BannerList();
         try {
             return $this->setSuccess($data->insertModel());
         } catch (\Exception $th) {

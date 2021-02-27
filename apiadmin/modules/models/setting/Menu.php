@@ -29,7 +29,7 @@ class Menu extends \common\models\Base
     public function rules()
     {
         return [
-            [['name', 'path'], 'required'],
+            [['name'], 'required'],
             [['parent_id', 'sort'], 'integer'],
             [['name'], 'string', 'max' => 30],
             [['path'], 'string', 'max' => 255],
