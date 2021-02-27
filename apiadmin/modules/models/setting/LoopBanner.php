@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string $title
  */
-class LoopBanner extends \yii\db\ActiveRecord
+class LoopBanner extends \common\models\Base
 {
     /**
      * {@inheritdoc}

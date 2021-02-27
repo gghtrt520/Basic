@@ -2,21 +2,14 @@
 namespace apiadmin\modules\v1\controllers;
 
 use Yii;
-use yii\rest\ActiveController;
 use yii\web\Response;
 use common\models\DB;
 use apiadmin\modules\models\admin\User;
-use common\utils\Model;
  
 
-/**
- * 接口基础处理
- * @author Administrator
- * @param  所有版本接口的控制器父类
- */
-class CoreController extends ActiveController
+class BaseController extends \yii\web\Controller
 {
-    public  $modelClass = 'apiadmin\modules\models\admin\User'; 
+
     private $http_id;
     public  $post;
     public  $get;
@@ -29,34 +22,17 @@ class CoreController extends ActiveController
     public function beforeAction($action)
     {
         $this->request = array_merge(Yii::$app->request->post(),Yii::$app->request->get(),$_FILES); 
-
         $this->http_id = DB::insert('http_log', [
-            'method' => $_SERVER['REQUEST_METHOD'],
-            'full_url' => Yii::$app->request->absoluteUrl,
+            'method'      => Yii::$app->request->getMethod(),
+            'full_url'    => Yii::$app->request->absoluteUrl,
             'http_status' => Yii::$app->response->statusCode,
-            'ips' => Yii::$app->request->userIP,
-            'request' => json_encode($this->request, JSON_UNESCAPED_UNICODE),
-            'create_at' => date("Y-m-d H:i:s")
+            'ips'         => Yii::$app->request->userIP,
+            'request'     => json_encode($this->request, JSON_UNESCAPED_UNICODE),
+            'create_at'   => date("Y-m-d H:i:s")
         ]);
-
-        $mod = ['common'];
-        $actionMod = ['reg','login','test'];
-        $controller = Yii::$app->controller->id;
-        $actionName = Yii::$app->controller->action->id;
-        if(in_array($controller, $mod) || in_array($actionName, $actionMod)) return true;
-            
-       if(!isset($this->request['auth_key'])) $this->error('auth_key is null.');
-
-        $this->_user = User::loginByAuthkey($this->request['auth_key']);        
-
-        if(empty($this->_user)) $this->error('用户不存在','200','404');
-
-        $this->_user = $this->_user->toarray();
-
-        $this->_uid = $this->_user['id']; 
-        $this->db = new DB();
         return true;
     }
+
 
     public function request($key,$default='')
     {
@@ -93,34 +69,31 @@ class CoreController extends ActiveController
     }
 
 
-    protected function parameter($request = [], $model = [])
+    public function setSuccess($send=[],$extend=[])
     {
-        $request['create_time'] = time(); // '创建时间',  
-        foreach ($request as $k => $v) {
-            if (array_key_exists($k, $model->attributes))
-                $model->$k = $v;
-        }
-        
-        return $model;
+        $data = [
+            'status' => 200,
+            'code'   => 0,
+            'msg'    => '操作成功',
+            'data'   => $send,
+            'extend' => $extend 
+        ];
+        DB::update('http_log', [ 'http_status' => $data['status'], 'response' => json_encode($send,JSON_UNESCAPED_UNICODE),'finish_at'=>date("Y-m-d H:i:s") ], ['id'=>$this->http_id]);
+        return $this->asJson($data);
     }
+
     
-    
-    public function model($model,$params,$scenario='')
+    public function setError($errors)
     {
-
-        $classDir  = 'apiadmin\\modules\\models'.'\\'.$model;   
-        $m = new $classDir();      
-        if(!$m){
-            $classDir = '\\common\\models\\'.$model;
-            $m = new $classDir();  
-        } 
-
-        if(!$m) $this->error(' model cannot be blank.');
-        if($scenario) $m->scenario = $scenario;
-
-        $m = $this->parameter($params,$m);
-        $m->validate() ?:$this->error($this->model_errors($m->errors));
-        return $m;
+        $data = [
+            'status' => 404,
+            'code'   => 1,
+            'msg'    => '操作失败',
+            'data'   => [],
+            'extend' => [] 
+        ];
+        DB::update('http_log', [ 'http_status' => $data['status'], 'response' => json_encode([],JSON_UNESCAPED_UNICODE),'finish_at'=>date("Y-m-d H:i:s") ], ['id'=>$this->http_id]);
+        return $this->asJson($data);
     }
     
     public function model_errors($errors=[]){
@@ -181,20 +154,7 @@ class CoreController extends ActiveController
         }
         $path = $dir.'/'.date('Y-m-d').'.txt';
         file_put_contents($path,$content,FILE_APPEND);
-    }
-    
-    public function setSuccess($send=[],$extend=[])
-    {
-        $data = [
-            'status' => 200,
-            'code'   => 0,
-            'msg'    => '操作成功',
-            'data'   => $send,
-            'extend' => $extend 
-        ];
-        DB::update('http_log', [ 'http_status' => $data['status'], 'response' => json_encode($send,JSON_UNESCAPED_UNICODE),'finish_at'=>date("Y-m-d H:i:s") ], ['id'=>$this->http_id]);
-        return $this->asJson($data);
-    }
+    }   
 
     
 }

@@ -13,7 +13,7 @@ use Yii;
  * @property string $path
  * @property string $href 是否存在链接
  */
-class BannerList extends \yii\db\ActiveRecord
+class BannerList extends \common\models\Base
 {
     /**
      * {@inheritdoc}

@@ -13,7 +13,7 @@ use Yii;
  * @property string $path 路由地址
  * @property int $sort 排序规则
  */
-class Menu extends \yii\db\ActiveRecord
+class Menu extends \common\models\Base
 {
     /**
      * {@inheritdoc}

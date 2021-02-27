@@ -14,7 +14,7 @@ class RoleController extends CoreController
 	public function actionRole_list()
 	{
 		$roleList = Roles::getRoles($this->_user);
-		$this->out('角色列表',$roleList);
+		return $this->setSuccess($roleList);
 	}
 
 	/*角色添加 修改*/
