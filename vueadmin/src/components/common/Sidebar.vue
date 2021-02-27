@@ -13,7 +13,7 @@
             <template v-for="(item,i) in items">
 
                 <template v-if="item.children">
-                    <el-submenu :index="i" :key="item.id">
+                    <el-submenu :index="String(i)" :key="item.id">
                         <template slot="title">
                             <i :class="item.icon"></i>
                             <span slot="title">{{ item.name }}</span>
