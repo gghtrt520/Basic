@@ -92,36 +92,6 @@ class CoreController extends ActiveController
         exit($out);
     }
 
-
-    protected function parameter($request = [], $model = [])
-    {
-        $request['create_time'] = time(); // '创建时间',  
-        foreach ($request as $k => $v) {
-            if (array_key_exists($k, $model->attributes))
-                $model->$k = $v;
-        }
-        
-        return $model;
-    }
-    
-    
-    public function model($model,$params,$scenario='')
-    {
-
-        $classDir  = 'apiadmin\\modules\\models'.'\\'.$model;   
-        $m = new $classDir();      
-        if(!$m){
-            $classDir = '\\common\\models\\'.$model;
-            $m = new $classDir();  
-        } 
-
-        if(!$m) $this->error(' model cannot be blank.');
-        if($scenario) $m->scenario = $scenario;
-
-        $m = $this->parameter($params,$m);
-        $m->validate() ?:$this->error($this->model_errors($m->errors));
-        return $m;
-    }
     
     public function model_errors($errors=[]){
         foreach ($errors as $k=>$v){
@@ -193,6 +163,19 @@ class CoreController extends ActiveController
             'extend' => $extend 
         ];
         DB::update('http_log', [ 'http_status' => $data['status'], 'response' => json_encode($send,JSON_UNESCAPED_UNICODE),'finish_at'=>date("Y-m-d H:i:s") ], ['id'=>$this->http_id]);
+        return $this->asJson($data);
+    }
+
+    public function setError($errors)
+    {
+        $data = [
+            'status' => 404,
+            'code'   => 1,
+            'msg'    => '操作失败',
+            'data'   => [],
+            'extend' => [] 
+        ];
+        DB::update('http_log', [ 'http_status' => $data['status'], 'response' => json_encode([],JSON_UNESCAPED_UNICODE),'finish_at'=>date("Y-m-d H:i:s") ], ['id'=>$this->http_id]);
         return $this->asJson($data);
     }
 
