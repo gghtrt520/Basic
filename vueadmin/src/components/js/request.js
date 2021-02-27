@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-var postUrl = 'http://v1.admin.com/v1/';
+var postUrl = 'http://basic.com/v1/';
 
 export function post_(url,data,callback){
 
