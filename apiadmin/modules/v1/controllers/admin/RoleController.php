@@ -40,7 +40,7 @@ class RoleController extends CoreController
 
 		}else{
 			$error = $role->getErrors();
-			$errMsg = $this->model_errors($errMsg);
+			$errMsg = $this->model_errors($error);
 			$this->error($errMsg);
 		}		
 	}
