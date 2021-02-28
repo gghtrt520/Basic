@@ -34,41 +34,6 @@ class BaseController extends \yii\web\Controller
     }
 
 
-    public function request($key,$default='')
-    {
-        $request = array_merge(Yii::$app->request->post(),Yii::$app->request->get(),$_FILES);
-        return isset($request[$key])?$request[$key]:$default;
-    }
-     
-        
-    public function out($msg='', $res = [],$extend=[]){
-        $data = [
-            'status' => "200"  ,
-            'code'   => '0',
-            'msg'    => (string)$msg,
-            'data'   => $res, 
-        ];
-        if($extend) $data['extend'] = $extend; 
-       return $this->send($data);  
-    }
-        
-    public function error($msg='', $status = '200',$code='1'){  
-        $data = [
-            'status'=> $status."",
-            'code'  => $code,
-            'msg'   => (string)$msg,
-        ];
-        return  $this->send($data);
-    }
-
-    public function send($data=[])
-    {
-        $out = json_encode($data,JSON_UNESCAPED_UNICODE);
-        DB::update('http_log', [ 'http_status' => $data['status'], 'response' => $out,'finish_at'=>date("Y-m-d H:i:s") ], ['id'=>$this->http_id]);
-        exit($out);
-    }
-
-
     public function setSuccess($send=[],$extend=[])
     {
         $data = [
@@ -86,7 +51,7 @@ class BaseController extends \yii\web\Controller
     public function setError()
     {
         $data = [
-            'status' => 404,
+            'status' => 400,
             'code'   => 1,
             'msg'    => '操作失败',
             'data'   => [],
@@ -96,49 +61,12 @@ class BaseController extends \yii\web\Controller
         return $this->asJson($data);
     }
     
-    public function model_errors($errors=[]){
-        foreach ($errors as $k=>$v){
-            return $v[0];
-        }
-        return 'model_errors';
+    public function getError($errors)
+    {
+        return reset($errors);
     }
 
 
-    public function get_curl($url)
-    {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec($curl);
-        curl_close($curl);
-        return $data;
-    }
-    
-    
-    public function post_curl($url,$params)
-    {
-        $httpInfo = array();
-        $ch = curl_init();
-        curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
-        // curl_setopt( $ch, CURLOPT_USERAGENT , 'xinykj.com' );
-        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 60 );
-        curl_setopt( $ch, CURLOPT_TIMEOUT , 60);
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
-        curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt( $ch , CURLOPT_POST , 1 );
-        curl_setopt( $ch , CURLOPT_POSTFIELDS , $params );
-        curl_setopt( $ch , CURLOPT_URL , $url );
-        $response = curl_exec( $ch );
-        if ($response === FALSE) {
-            return false;
-        }
-        $httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
-        $httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
-        curl_close( $ch );
-        return $response;
-    }
 
     //记入日志
     public function write_log($content,$tempDir='')
