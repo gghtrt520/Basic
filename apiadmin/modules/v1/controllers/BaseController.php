@@ -156,5 +156,15 @@ class BaseController extends \yii\web\Controller
         file_put_contents($path,$content,FILE_APPEND);
     }   
 
+    public function actionUpload()
+    {
+        $model = new \common\models\Base();
+        try {
+            $path = $model->uploadFile('file');
+            return $this->setSuccess($path);
+        } catch (\Exception $th) {
+            return $this->setError();
+        }
+    }
     
 }
