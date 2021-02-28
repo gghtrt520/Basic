@@ -35,7 +35,7 @@
 				ifload:false,
                 uploadType:'image',
                 content:'',
-                serverUrl: baseUrl+'/common/qiniu',  // 这里写你要上传的图片服务器地址
+                serverUrl: postUrl+'/common/qiniu',  // 这里写你要上传的图片服务器地址
                 header: {},  // 有的图片服务器要求请求头需要有token之类的参数，写在这里
                 editorOption: {
                     placeholder: '',
