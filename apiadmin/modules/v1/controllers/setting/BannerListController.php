@@ -10,7 +10,7 @@ class BannerListController extends \apiadmin\modules\v1\controllers\BaseControll
     public function actionList()
     {
         $data  = new \apiadmin\modules\models\setting\BannerList();
-        return $this->setSuccess($data->searchModel());
+        return $this->setSuccess($data->searchModel($this->pages),$this->getPages());
     }
     
     public function actionAdd()

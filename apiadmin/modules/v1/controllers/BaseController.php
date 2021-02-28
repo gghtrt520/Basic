@@ -9,7 +9,7 @@ use apiadmin\modules\models\admin\User;
 
 class BaseController extends \yii\web\Controller
 {
-
+    public $pages  = 0;
     private $http_id;
     public  $post;
     public  $get;
@@ -31,6 +31,11 @@ class BaseController extends \yii\web\Controller
             'create_at'   => date("Y-m-d H:i:s")
         ]);
         return true;
+    }
+
+    public function getPages()
+    {
+        return ['pages'=>$this->pages];
     }
 
 

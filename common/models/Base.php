@@ -16,7 +16,7 @@ class Base extends \yii\db\ActiveRecord
     /**
      * 模型查询数据
      */
-    public  function searchModel()
+    public  function searchModel(&$page)
     {
         $attributes = $this->attributes();
         $params = array_merge(Yii::$app->request->post(),Yii::$app->request->get());
@@ -33,6 +33,7 @@ class Base extends \yii\db\ActiveRecord
             'totalCount' => $find->count(),
             'pageSize'   => $params['page_size'],
         ]);
+        $page = $find->count();
         return $find->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
     }
 

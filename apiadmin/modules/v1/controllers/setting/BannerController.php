@@ -10,7 +10,7 @@ class BannerController extends \apiadmin\modules\v1\controllers\BaseController
     public function actionList()
     {
         $data  = new \apiadmin\modules\models\setting\LoopBanner();
-        return $this->setSuccess($data->searchModel());
+        return $this->setSuccess($data->searchModel($this->pages),$this->getPages());
     }
 
     public function actionAdd()
