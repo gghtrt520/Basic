@@ -55,6 +55,7 @@ class Base extends \yii\db\ActiveRecord
             }
         }
         if($this->save()){
+            $params['id'] = $this->id;
             return $params;
         }else{
             throw new \yii\base\InvalidValueException(reset($this->getErrors()));
