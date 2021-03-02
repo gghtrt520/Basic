@@ -11,13 +11,13 @@
     <div class="container">
       <el-tabs v-model="activeName" type="card">
         <!-- <el-tab-pane label="基本信息" name="base">
-          <goodsBase v-if="activeName=='base'" :goodsCommonid="goodsCommonid" @baseSuccess="baseSuccess"></goodsBase>
+          <goodsBase v-if="activeName=='base'" :id="id" @baseSuccess="baseSuccess"></goodsBase>
         </el-tab-pane>
-        <el-tab-pane label="产品详情" name="detail" v-if="goodsCommonid>0">
-          <goodsDetail v-if="activeName=='detail'" :goodsCommonid="goodsCommonid"></goodsDetail>
+        <el-tab-pane label="产品详情" name="detail" v-if="id>0">
+          <goodsDetail v-if="activeName=='detail'" :id="id"></goodsDetail>
         </el-tab-pane> -->
-        <el-tab-pane label="商品图片" name="images" v-if="goodsCommonid>0">
-          <goodsImages v-if="activeName=='images'" :goodsCommonid="goodsCommonid"></goodsImages>
+        <el-tab-pane label="详情" name="images">
+          <goodsImages :id="id"></goodsImages>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -32,17 +32,17 @@ export default {
   components: { goodsBase, goodsDetail, goodsImages },
   data() {
     return {
-      activeName: 'base',
-      goodsCommonid: 1,
+      activeName: 'images',
+      id: 1,
     }
   },
   created() {
-    // this.goodsCommonid = Number(this.$route.query.goods_commonid);
+    // this.id = Number(this.$route.query.goods_commonid);
   },
   methods: {
     //添加成功
-    baseSuccess(goodsCommonid) {
-      this.goodsCommonid = Number(goodsCommonid);
+    baseSuccess(id) {
+      this.id = Number(id);
       this.activeName = 'detail';
     }
   }

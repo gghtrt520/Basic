@@ -2,10 +2,10 @@
   <div v-loading="ifload">
     <el-row>
       <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
-        <el-form ref="form" :model="form" label-width="120px">
+        <el-form ref="form" :model="form">
 
-          <el-form-item :label="item.name?item.name:'默认'" v-for="(item,index) in data" :key="index">
-            <el-row>
+          <el-row>
+            <el-form-item :label="item.name?item.name:'默认'" v-for="(item,index) in data" :key="index">
               <el-col class="col" :span="4" v-for="(images,i) in item.images" :key="i">
                 <div class="image">
                   <img :src="images.image_url" width="60%" />
@@ -17,15 +17,15 @@
                   </el-input>
                 </div>
               </el-col>
-              <el-col :span="3" v-show="true">
-                <div class="upload">
-                  <upload :size='32' :uploadType="'2'" :params="{index:index}" @showImg="showImg">
-                  </upload>
-                </div>
-
-              </el-col>
-            </el-row>
-          </el-form-item>
+            </el-form-item>
+            <el-col>
+              <div class="upload">
+                <el-upload class="upload-demo" :action="baseUrl +'setting/banner-list/upload'" :on-remove="handleRemove" :file-list="fileList" list-type="picture-card">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+              </div>
+            </el-col>
+          </el-row>
 
           <el-form-item label="">
             <el-button :loading="ifload" type="primary" @click="save">保存</el-button>
@@ -39,30 +39,33 @@
 
 <script type="text/javascript">
 import { baseUrl } from '@/components/js/request.js';
-import upload from '@/components/utils/upload';
 import loading from '@/components/utils/loading';
 export default {
-  components: { upload, loading },
+  components: { loading },
   props: {
-    goodsCommonid: { type: Number, default: 0 },
+    id: { type: Number, default: 0 },
   },
   data() {
     return {
+      baseUrl: baseUrl,
       ifload: false,
       form: {},
-      data: [],
+      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
     }
   },
   created() {
-    this.form.goods_commonid = this.goodsCommonid;
+    this.form.goods_commonid = this.id;
     this.$nextTick(() => {
       this._initGoodsImages();
     })
   },
   methods: {
+    uploadImage() {
+      console.log(1)
+    },
     _initGoodsImages() {
       this.ifload = false;
-      // let param = {goods_commonid:this.goodsCommonid};
+      // let param = {goods_commonid:this.id};
       // this.$post_('goods/goods/get_goods_images',param,(res) => {
       // 	console.log(res);
       // 	this.ifload = false;
@@ -84,9 +87,9 @@ export default {
       this.ifload = true;
       let param = {
         data: JSON.stringify(this.data),
-        goods_commonid: this.goodsCommonid,
+        goods_commonid: this.id,
       };
-      this.$post_('goods/goods/save_images', param, (res) => {
+      this.$post_('setting/banner-list/add', param, (res) => {
         console.log(res);
         this.ifload = false;
         if (res.code == '0') {
@@ -122,12 +125,6 @@ export default {
   right: 3px;
   top: 0px;
   color: red;
-}
-.upload {
-  /* background: #006666; */
-  line-height: 50px;
-  vertical-align: middle;
-  text-align: center;
 }
 .extra {
   text-align: center;
