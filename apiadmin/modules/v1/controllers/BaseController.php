@@ -96,6 +96,7 @@ class BaseController extends \yii\web\Controller
             $path = $model->uploadFile('file');
             return $this->setSuccess($path);
         } catch (\Exception $th) {
+            print_r($th->getMessage());
             return $this->setError();
         }
     }

@@ -119,9 +119,9 @@ class Base extends \yii\db\ActiveRecord
             if ($file->error) {
                 throw new BadRequestHttpException($file->error);
             }
-            $this->file_name =  microtime(true).'.'.$file->extension;
-            $file_name = $this->createUploadPath($attribute) . $this->file_name;
-            if ($file->saveAs($this->root_path . $file_name)) {
+            $file_name =  microtime(true).'.'.$file->extension;
+            $file_name = $this->createUploadPath($attribute) . $file_name;
+            if ($file->saveAs(Yii::getAlias('apiadmin/web/') . $file_name)) {
                 return Yii::$app->request->getHostInfo().DIRECTORY_SEPARATOR.$file_name;
             } else {
                 throw new BadRequestHttpException('文件上传失败');
@@ -133,9 +133,9 @@ class Base extends \yii\db\ActiveRecord
 
     public function createUploadPath($attribute)
     {
-        $path = rtrim(DIRECTORY_SEPARATOR . 'upload'. DIRECTORY_SEPARATOR. $this->module . DIRECTORY_SEPARATOR . $attribute . DIRECTORY_SEPARATOR);
-        if (!is_dir($this->root_path . $path)) {
-            FileHelper::createDirectory($this->root_path . $path, 0777);
+        $path = rtrim(DIRECTORY_SEPARATOR . 'upload'. DIRECTORY_SEPARATOR. 'banner' . DIRECTORY_SEPARATOR . $attribute . DIRECTORY_SEPARATOR);
+        if (!is_dir(Yii::getAlias('apiadmin/web/') . $path)) {
+            FileHelper::createDirectory(Yii::getAlias('apiadmin/web/') . $path, 0777);
         }
         return $path;
     }
