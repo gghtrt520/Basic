@@ -20,7 +20,7 @@
             </el-form-item>
             <el-col>
               <div class="upload">
-                <el-upload class="upload-demo" :action="baseUrl +'setting/banner-list/upload'" :on-remove="handleRemove" :file-list="fileList" list-type="picture-card">
+                <el-upload class="upload-demo" :action="baseUrl +'setting/banner-list/upload'" :on-remove="remove" :on-success="save" :file-list="fileList" list-type="picture-card">
                   <i class="el-icon-plus"></i>
                 </el-upload>
               </div>
@@ -50,45 +50,24 @@ export default {
       baseUrl: baseUrl,
       ifload: false,
       form: {},
-      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
+      fileList: [],
     }
   },
   created() {
     this.form.goods_commonid = this.id;
-    this.$nextTick(() => {
-      this._initGoodsImages();
-    })
   },
   methods: {
-    uploadImage() {
-      console.log(1)
-    },
-    _initGoodsImages() {
-      this.ifload = false;
-      // let param = {goods_commonid:this.id};
-      // this.$post_('goods/goods/get_goods_images',param,(res) => {
-      // 	console.log(res);
-      // 	this.ifload = false;
-      // 	this.data = res.data;
-      // })
-    },
-    //显示图片
-    showImg(imgUrl, val) {
-      console.log(this.data);
-      this.data[val.index].images.push({ image_url: imgUrl });
-    },
-    //删除图片
-    delImg(index, i) {
-      this.data[index]['images'].splice(i, 1);
-    },
 
-    save() {
-      // console.log(this.data);
-      this.ifload = true;
+    remove() {
+
+    },
+    save(response, file, fileList) {
+      // debugger
+      console.log(file);
       let param = {
-        data: JSON.stringify(this.data),
-        goods_commonid: this.id,
-      };
+        id: this.$route.query.id,
+        path: file.response.data
+      }
       this.$post_('setting/banner-list/add', param, (res) => {
         console.log(res);
         this.ifload = false;
