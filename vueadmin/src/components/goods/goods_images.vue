@@ -62,7 +62,7 @@ export default {
       console.log(file);
       let param = {
         loop_banner_id: this.$route.query.id,
-        url: file.response.data
+        path: file.response.data
       }
       this.$post_('setting/banner-list/add', param, (res) => {
         console.log(res);
