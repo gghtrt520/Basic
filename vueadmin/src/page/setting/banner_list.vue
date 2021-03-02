@@ -114,7 +114,7 @@ export default {
         if (res.code == '0') {
           this.$router.push({
             path: "/page/setting/goods_edit",
-            query: { id: classify.id },
+            query: { id: classify.id, data: res.data },
           });
         } else {
           this.$message.error(res.msg);

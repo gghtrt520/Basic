@@ -26,10 +26,6 @@
               </div>
             </el-col>
           </el-row>
-
-          <el-form-item label="">
-            <el-button :loading="ifload" type="primary" @click="save">保存</el-button>
-          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -50,10 +46,11 @@ export default {
       baseUrl: baseUrl,
       ifload: false,
       form: {},
-      fileList: [],
+      fileList: this.$route.query.data,
     }
   },
   created() {
+    console.log(this.fileList)
     this.form.goods_commonid = this.id;
   },
   methods: {
@@ -62,11 +59,10 @@ export default {
 
     },
     save(response, file, fileList) {
-      // debugger
       console.log(file);
       let param = {
-        id: this.$route.query.id,
-        path: file.response.data
+        loop_banner_id: this.$route.query.id,
+        url: file.response.data
       }
       this.$post_('setting/banner-list/add', param, (res) => {
         console.log(res);
