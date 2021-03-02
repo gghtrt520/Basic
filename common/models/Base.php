@@ -79,12 +79,12 @@ class Base extends \yii\db\ActiveRecord
             }
         }
         if(isset($params['id'])){
-            $this->findOne($params['id']);
+            $model = $this->findOne($params['id']);
             unset($params['id']);
             foreach ($params as $key => $value) {
-                $this->$key = $value;
+                $model->$key = $value;
             }
-            if($this->save()){
+            if($model->save()){
                 return $params;
             }else{
                 throw new \yii\base\InvalidValueException(reset($this->getErrors()));
@@ -102,8 +102,8 @@ class Base extends \yii\db\ActiveRecord
         $attributes = $this->attributes();
         $params = array_merge(Yii::$app->request->post(),Yii::$app->request->get());
         if(isset($params['id'])){
-            $this->findOne($params['id']);
-            if($this->delete()){
+            $model = $this->findOne($params['id']);
+            if($model->delete()){
                 return $params;
             }else{
                 throw new \yii\base\InvalidValueException(reset($this->getErrors()));
