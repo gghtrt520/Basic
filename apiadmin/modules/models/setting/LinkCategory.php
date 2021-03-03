@@ -1,6 +1,6 @@
 <?php
 
-namespace apiadmin\modules\models\content;
+namespace apiadmin\modules\models\setting;
 
 use Yii;
 
