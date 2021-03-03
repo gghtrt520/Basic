@@ -15,6 +15,8 @@ use Yii;
  */
 class Menu extends \common\models\Base
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -48,5 +50,46 @@ class Menu extends \common\models\Base
             'path' => 'Path',
             'sort' => 'Sort',
         ];
+    }
+
+    
+    public function getSubMenu()
+    {
+        return self::find()->where(['parent_id'=>$this->id])->asArray()->all();
+    }
+
+
+    public  function searchModel(&$page)
+    {
+        $attributes = $this->attributes();
+        $params = array_merge(Yii::$app->request->post(),Yii::$app->request->get());
+        if($params){
+            foreach ($params as $key => $value) {
+                if(!in_array($key,$attributes)){
+                    unset($params[$key]);
+                }   
+            }
+        }
+        $params['parent_id'] = 0;
+        $find                = self::find()->filterWhere($params);
+        $params['page_size'] = Yii::$app->request->post('page_size',self::PAGE_SIZE);
+        $pagination   = new \yii\data\Pagination([
+            'totalCount' => $find->count(),
+            'pageSize'   => $params['page_size'],
+        ]);
+        $page = $find->count();
+        $all  = $find->offset($pagination->offset)->limit($pagination->limit)->all();
+        if($all){
+            foreach ($all as $value) {
+                $data['id']        = $value->id;
+                $data['name']      = $value->name;
+                $data['parent_id'] = $value->parent_id;
+                $data['path']      = $value->path;
+                $data['sort']      = $value->sort;
+                $data['submenu']   = $value->getSubMenu();
+                $return[] = $data;
+            }
+        }
+        return $return?:[];
     }
 }
