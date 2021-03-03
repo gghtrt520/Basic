@@ -29,7 +29,7 @@ class BannerList extends \common\models\Base
     public function rules()
     {
         return [
-            [['loop_banner_id', 'path'], 'required'],
+            [['loop_banner_id', 'url'], 'required'],
             [['loop_banner_id'], 'integer'],
             [['attr', 'path', 'href'], 'string', 'max' => 255],
         ];
@@ -44,7 +44,7 @@ class BannerList extends \common\models\Base
             'id' => 'ID',
             'loop_banner_id' => 'Loop Banner ID',
             'attr' => 'Attr',
-            'path' => 'Path',
+            'url'  => 'Url',
             'href' => 'Href',
         ];
     }
