@@ -2,7 +2,7 @@
   <div v-loading="ifload">
     <el-row>
       <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
-        <el-form ref="form" :model="form">
+        <el-form ref="form">
           <el-row>
             <el-col>
               <div class="upload">
@@ -31,31 +31,28 @@ export default {
     return {
       baseUrl: baseUrl,
       ifload: false,
-      form: {},
       fileList: this.$route.query.data,
       // fileList: [{ url: 'http://localhost//upload/banner/file/1614701612.0728.jpg' }],
     }
   },
   created() {
-    console.log(this.$route.query)
-    this.form.goods_commonid = this.id;
   },
   methods: {
-
     remove(file) {
+      let that = this;
       this.fileList.forEach((item, index) => {
         if (item.id == file.id) {
-          this.fileList.splice(index, 1)
           this.$post_('setting/banner-list/delete', { id: file.id }, (res) => {
             if (res.code == '0') {
-              this.$message.success('删除成功！');
-              this.$post_('setting/banner-list/list', { loop_banner_id: this.$route.query.id }, (res) => {
+              that.fileList.splice(index, 1)
+              that.$message.success('删除成功！');
+              that.$post_('setting/banner-list/list', { loop_banner_id: that.$route.query.id }, (res) => {
                 if (res.code == '0') {
-                  this.fileList = res.data
+                  that.fileList = res.data
                 }
               })
             } else {
-              this.$message.error(res.msg);
+              that.$message.error(res.msg);
             }
           })
         }
@@ -69,11 +66,13 @@ export default {
       this.add(param)
     },
     add(param) {
+      let that = this;
       this.$post_('setting/banner-list/add', param, (res) => {
-        console.log(res);
         this.ifload = false;
         if (res.code == '0') {
+          that.fileList.push(res.data)
           this.$message.success(res.msg);
+
         } else {
           this.$message.error(res.msg);
         }

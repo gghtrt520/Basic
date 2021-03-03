@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item><i class="el-icon-lx-cascades"></i> 网站设置</el-breadcrumb-item>
-        <el-breadcrumb-item>友情链接分类</el-breadcrumb-item>
+        <el-breadcrumb-item>友情链接详情</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="container">
@@ -12,12 +12,13 @@
       </div>
       <el-table :data="tableData" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
 
-        <el-table-column prop="id" align="center" label="序号" sortable width="150"></el-table-column>
-        <el-table-column prop="category" align="center" label="分类名称"> </el-table-column>
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
+        <el-table-column prop="id" label="序号" sortable width="150"></el-table-column>
+        <el-table-column prop="user_name" label="用户名" width="160"> </el-table-column>
+        <el-table-column prop="role_id" label="角色" :formatter="formatRole"></el-table-column>
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="handleDetail(scope.$index)">详情</el-button>
-            <!-- <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
+            <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -27,8 +28,18 @@
     <!-- 编辑弹出框 -->
     <el-dialog :title="idx>0?'编辑':'添加'" :visible.sync="editVisible" width="30%">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="分类名称">
-          <el-input v-model="form.category"></el-input>
+        <el-form-item label="用户名">
+          <el-input v-model="form.user_name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="密码重置">
+          <el-input v-model="form.password"></el-input>
+        </el-form-item>
+        <el-form-item label="所属角色">
+          <el-select v-model="form.role_id" placeholder="请选择">
+            <el-option v-for="(item,index) in roleList" :key="index" :label="item" :value="index">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -58,7 +69,9 @@ export default {
       editVisible: false,
       delVisible: false,
       form: {
-        category: '',
+        user_name: '',
+        password: '',
+        role_id: '',
         id: 0,
       },
       idx: -1,
@@ -72,9 +85,9 @@ export default {
   },
 
   methods: {
-    // 友情链接分类列表
+    // 用户列表
     getData() {
-      this.$post_('setting/link-category/list', {}, (res) => {
+      this.$post_('setting/link/list', {}, (res) => {
         console.log(res);
         this.tableData = res.data;
         this.roleList = res.extend.role_list;
@@ -86,8 +99,10 @@ export default {
     },
     //添加
     handleAdd() {
-      this.form.category = '';
+      this.form.user_name = '';
+      this.form.role_id = '';
       this.form.id = 0;
+      this.password = '';
       this.idx = -1;
       this.id = 0;
       this.editVisible = true;
@@ -99,17 +114,12 @@ export default {
       this.id = row.id;
       const item = this.tableData[index];
       this.form = {
-        category: item.category,
+        user_name: item.user_name,
+        role_id: item.role_id,
         id: this.id,
       }
+      console.log(this.form);
       this.editVisible = true;
-    },
-    //详情
-    handleDetail(index) {
-      this.$router.push({
-        path: "/page/setting/link_list_edit",
-        param: { id: this.tableData[index].id },
-      });
     },
     handleDelete(index, row) {
       this.id = row.id;
@@ -123,7 +133,7 @@ export default {
     // 保存编辑
     saveEdit() {
       // console.log(this.form);return;
-      this.$post_('setting/link-category/add', this.form, (res) => {
+      this.$post_('/setting/link/add', this.form, (res) => {
         console.log(res);
         if (res.code == '0') {
           if (this.id < 1) {
@@ -140,7 +150,7 @@ export default {
     },
     // 确定删除
     deleteRow() {
-      this.$post_('setting/link-category/delete', { id: this.id }, (res) => {
+      this.$post_('/setting/link/delete', { id: this.id }, (res) => {
         console.log(res);
         if (res.code == '0') {
           this.$message.success(res.msg);
