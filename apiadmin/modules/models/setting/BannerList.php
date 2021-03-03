@@ -31,7 +31,7 @@ class BannerList extends \common\models\Base
         return [
             [['loop_banner_id', 'url'], 'required'],
             [['loop_banner_id'], 'integer'],
-            [['attr', 'path', 'href'], 'string', 'max' => 255],
+            [['attr', 'url', 'href'], 'string', 'max' => 255],
         ];
     }
 
