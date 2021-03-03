@@ -3,21 +3,7 @@
     <el-row>
       <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
         <el-form ref="form" :model="form">
-
           <el-row>
-            <el-form-item :label="item.name?item.name:'默认'" v-for="(item,index) in data" :key="index">
-              <el-col class="col" :span="4" v-for="(images,i) in item.images" :key="i">
-                <div class="image">
-                  <img :src="images.image_url" width="60%" />
-                  <i class="el-icon-delete" @click="delImg(index,i)"></i>
-                </div>
-                <div class="extra">
-                  <el-input placeholder="排序" size="mini" class="sort" v-model="data[index]['images'][i]['sort']">
-                    <i slot="prefix" class="el-input__icon el-icon-sort"></i>
-                  </el-input>
-                </div>
-              </el-col>
-            </el-form-item>
             <el-col>
               <div class="upload">
                 <el-upload class="upload-demo" :action="baseUrl +'setting/banner-list/upload'" :on-remove="remove" :on-success="save" :file-list="fileList" list-type="picture-card">
@@ -47,23 +33,42 @@ export default {
       ifload: false,
       form: {},
       fileList: this.$route.query.data,
+      // fileList: [{ url: 'http://localhost//upload/banner/file/1614701612.0728.jpg' }],
     }
   },
   created() {
-    console.log(this.fileList)
+    console.log(this.$route.query)
     this.form.goods_commonid = this.id;
   },
   methods: {
 
-    remove() {
-
+    remove(file) {
+      this.fileList.forEach((item, index) => {
+        if (item.id == file.id) {
+          this.fileList.splice(index, 1)
+          this.$post_('setting/banner-list/delete', { id: file.id }, (res) => {
+            if (res.code == '0') {
+              this.$message.success('删除成功！');
+              this.$post_('setting/banner-list/list', { loop_banner_id: this.$route.query.id }, (res) => {
+                if (res.code == '0') {
+                  this.fileList = res.data
+                }
+              })
+            } else {
+              this.$message.error(res.msg);
+            }
+          })
+        }
+      })
     },
     save(response, file, fileList) {
-      console.log(file);
       let param = {
         loop_banner_id: this.$route.query.id,
-        path: file.response.data
+        url: file.response.data
       }
+      this.add(param)
+    },
+    add(param) {
       this.$post_('setting/banner-list/add', param, (res) => {
         console.log(res);
         this.ifload = false;
@@ -73,7 +78,7 @@ export default {
           this.$message.error(res.msg);
         }
       })
-    },
+    }
   },
 }
 </script>
