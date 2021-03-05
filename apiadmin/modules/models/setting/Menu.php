@@ -55,7 +55,20 @@ class Menu extends \common\models\Base
     
     public function getSubMenu()
     {
-        return self::find()->where(['parent_id'=>$this->id])->asArray()->all();
+        $return = [];
+        $data = self::find()->where(['parent_id'=>$this->id])->all();
+        if($data){
+            foreach ($data as $value) {
+                $one['id']         = $value->id;
+                $one['label']      = $value->name;
+                $one['parent_id']  = $value->parent_id;
+                $one['path']       = $value->path;
+                $one['sort']       = $value->sort;
+                $one['children']   = $value->getSubMenu();
+                $return[] = $one;
+            }
+        }
+        return $return;
     }
 
 
@@ -72,21 +85,16 @@ class Menu extends \common\models\Base
         }
         $params['parent_id'] = 0;
         $find                = self::find()->filterWhere($params);
-        $params['page_size'] = Yii::$app->request->post('page_size',self::PAGE_SIZE);
-        $pagination   = new \yii\data\Pagination([
-            'totalCount' => $find->count(),
-            'pageSize'   => $params['page_size'],
-        ]);
         $page = $find->count();
-        $all  = $find->offset($pagination->offset)->limit($pagination->limit)->all();
+        $all  = $find->all();
         if($all){
             foreach ($all as $value) {
-                $data['id']        = $value->id;
-                $data['name']      = $value->name;
-                $data['parent_id'] = $value->parent_id;
-                $data['path']      = $value->path;
-                $data['sort']      = $value->sort;
-                $data['submenu']   = $value->getSubMenu();
+                $data['id']         = $value->id;
+                $data['label']      = $value->name;
+                $data['parent_id']  = $value->parent_id;
+                $data['path']       = $value->path;
+                $data['sort']       = $value->sort;
+                $data['children']   = $value->getSubMenu();
                 $return[] = $data;
             }
         }
