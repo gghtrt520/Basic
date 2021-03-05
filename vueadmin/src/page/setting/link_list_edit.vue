@@ -11,14 +11,11 @@
         <el-button icon="el-icon-add" @click="handleAdd" type="success">添加</el-button>
       </div>
       <el-table :data="tableData" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
-
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column prop="id" label="序号" sortable width="150"></el-table-column>
-        <el-table-column prop="user_name" label="用户名" width="160"> </el-table-column>
-        <el-table-column prop="role_id" label="角色" :formatter="formatRole"></el-table-column>
+        <el-table-column prop="id" label="序号" sortable width="150" align="center"></el-table-column>
+        <el-table-column prop="name" label="名称" width="160" align="center"> </el-table-column>
+        <el-table-column prop="href" label="链接" align="center"></el-table-column>
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -28,18 +25,11 @@
     <!-- 编辑弹出框 -->
     <el-dialog :title="idx>0?'编辑':'添加'" :visible.sync="editVisible" width="30%">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="用户名">
-          <el-input v-model="form.user_name"></el-input>
+        <el-form-item label="名称">
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
-
-        <el-form-item label="密码重置">
-          <el-input v-model="form.password"></el-input>
-        </el-form-item>
-        <el-form-item label="所属角色">
-          <el-select v-model="form.role_id" placeholder="请选择">
-            <el-option v-for="(item,index) in roleList" :key="index" :label="item" :value="index">
-            </el-option>
-          </el-select>
+        <el-form-item label="链接">
+          <el-input v-model="form.href"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -69,8 +59,8 @@ export default {
       editVisible: false,
       delVisible: false,
       form: {
-        user_name: '',
-        password: '',
+        name: '',
+        href: '',
         role_id: '',
         id: 0,
       },
@@ -80,29 +70,24 @@ export default {
     }
   },
   created() {
-    console.log('created');
     this.getData();
   },
 
   methods: {
     // 用户列表
     getData() {
-      this.$post_('setting/link/list', {}, (res) => {
-        console.log(res);
+      this.$post_('/setting/link/list', {}, (res) => {
         this.tableData = res.data;
-        this.roleList = res.extend.role_list;
       });
     },
     formatRole(row, column) {
-      // console.log(row);
       return this.roleList[row.role_id];
     },
     //添加
     handleAdd() {
-      this.form.user_name = '';
-      this.form.role_id = '';
+      this.form.name = '';
+      this.form.href = '';
       this.form.id = 0;
-      this.password = '';
       this.idx = -1;
       this.id = 0;
       this.editVisible = true;
@@ -114,8 +99,8 @@ export default {
       this.id = row.id;
       const item = this.tableData[index];
       this.form = {
-        user_name: item.user_name,
-        role_id: item.role_id,
+        name: item.name,
+        href: item.href,
         id: this.id,
       }
       console.log(this.form);

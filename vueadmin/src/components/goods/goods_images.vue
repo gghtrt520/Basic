@@ -31,11 +31,18 @@ export default {
     return {
       baseUrl: baseUrl,
       ifload: false,
-      fileList: this.$route.query.data,
+      fileList: [],
       // fileList: [{ url: 'http://localhost//upload/banner/file/1614701612.0728.jpg' }],
     }
   },
   created() {
+    this.$post_('setting/banner-list/list', { loop_banner_id: this.$route.query.id }, (res) => {
+      if (res.code == '0') {
+        this.fileList = res.data;
+      } else {
+        this.$message.error(res.msg);
+      }
+    })
   },
   methods: {
     remove(file) {

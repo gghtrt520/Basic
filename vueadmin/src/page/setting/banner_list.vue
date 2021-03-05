@@ -109,17 +109,10 @@ export default {
       });
     },
     eidtClassify(classify) {
-
-      this.$post_('setting/banner-list/list', { loop_banner_id: classify.id }, (res) => {
-        if (res.code == '0') {
-          this.$router.push({
-            path: "/page/setting/goods_edit",
-            query: { id: classify.id, data: res.data },
-          });
-        } else {
-          this.$message.error(res.msg);
-        }
-      })
+      this.$router.push({
+        path: "/page/setting/goods_edit",
+        query: { id: classify.id },
+      });
     },
     handleDel(index, classify) {
       this.delVisible = true;
