@@ -9,12 +9,12 @@ use apiadmin\modules\models\admin\User;
 
 class BaseController extends \yii\web\Controller
 {
-    public $pages  = 0;
+    public  $pages  = 0;
     private $http_id;
     public  $post;
     public  $get;
-    public  $_user;  //用户信息
-    public  $_uid;
+    public  $user;  //用户信息
+    public  $uid;
     public  $request;
     public  $db;
 
@@ -53,12 +53,12 @@ class BaseController extends \yii\web\Controller
     }
 
     
-    public function setError()
+    public function setError($error='')
     {
         $data = [
             'status' => 400,
             'code'   => 1,
-            'msg'    => '操作失败',
+            'msg'    => $error?:'操作失败',
             'data'   => [],
             'extend' => [] 
         ];

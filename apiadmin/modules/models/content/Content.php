@@ -18,6 +18,21 @@ use Yii;
  */
 class Content extends \common\models\Base
 {
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::className(),
+                'attributes' => [
+                    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
+                ],
+                'value' => date('Y-m-d H:i:s',time()),
+            ]
+        ];
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -55,5 +70,16 @@ class Content extends \common\models\Base
             'user_id' => 'User ID',
             'create_time' => 'Create Time',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->user_id = $this->user ? $this->user->id:'';
+            }
+            return true;
+        }
+        return false;
     }
 }

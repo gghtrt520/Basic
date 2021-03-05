@@ -13,6 +13,17 @@ class Base extends \yii\db\ActiveRecord
      */
     const PAGE_SIZE = 10;
 
+    public $user;
+    
+    public function init()
+    {
+        $params = array_merge(Yii::$app->request->post(),Yii::$app->request->get());
+        if(isset($params['auth_key'])){
+            $this->user = \apiadmin\modules\models\admin\User::loginByAuthkey($params['auth_key']);
+        }
+        parent::init();
+    }
+
     /**
      * 模型查询数据
      */
