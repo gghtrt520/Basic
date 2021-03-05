@@ -61,14 +61,14 @@ class Content extends \common\models\Base
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'content' => 'Content',
-            'image' => 'Image',
+            'id'           => 'ID',
+            'title'        => 'Title',
+            'content'      => 'Content',
+            'image'        => 'Image',
             'is_available' => 'Is Available',
-            'menu_id' => 'Menu ID',
-            'user_id' => 'User ID',
-            'create_time' => 'Create Time',
+            'menu_id'      => 'Menu ID',
+            'user_id'      => 'User ID',
+            'create_time'  => 'Create Time',
         ];
     }
 
