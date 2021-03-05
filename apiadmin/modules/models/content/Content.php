@@ -47,11 +47,11 @@ class Content extends \common\models\Base
     public function rules()
     {
         return [
-            [['title', 'content'], 'required'],
+            [['title', 'content','resume'], 'required'],
             [['content', 'is_available'], 'string'],
             [['menu_id', 'user_id'], 'integer'],
             [['create_time'], 'safe'],
-            [['title', 'image'], 'string', 'max' => 255],
+            [['title', 'image','resume'], 'string', 'max' => 255],
         ];
     }
 
@@ -63,6 +63,7 @@ class Content extends \common\models\Base
         return [
             'id'           => 'ID',
             'title'        => 'Title',
+            'resume'       => 'Resume',
             'content'      => 'Content',
             'image'        => 'Image',
             'is_available' => 'Is Available',
