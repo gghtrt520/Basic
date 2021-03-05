@@ -135,7 +135,7 @@ export default {
     },
     // 确定删除
     deleteRow() {
-      this.$post_('/setting/link/delete', { id: this.id }, (res) => {
+      this.$post_('setting/link/delete', { id: this.id }, (res) => {
         console.log(res);
         if (res.code == '0') {
           this.$message.success(res.msg);
