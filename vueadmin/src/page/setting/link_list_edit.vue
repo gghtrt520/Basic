@@ -76,7 +76,7 @@ export default {
   methods: {
     // 用户列表
     getData() {
-      this.$post_('/setting/link/list', {}, (res) => {
+      this.$post_('setting/link/list', {}, (res) => {
         this.tableData = res.data;
       });
     },
@@ -118,7 +118,7 @@ export default {
     // 保存编辑
     saveEdit() {
       // console.log(this.form);return;
-      this.$post_('/setting/link/add', this.form, (res) => {
+      this.$post_('setting/link/add', this.form, (res) => {
         console.log(res);
         if (res.code == '0') {
           if (this.id < 1) {
