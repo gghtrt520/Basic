@@ -73,11 +73,18 @@ class Content extends \common\models\Base
         ];
     }
 
+
+    /**
+     * 添加用户id 如果用户是管理员用户 文章直接已审核
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
                 $this->user_id = $this->user ? $this->user->id:'';
+                if($this->user_id && $this->user_id ==1){
+                    $this->is_available = 1;
+                }
             }
             return true;
         }
