@@ -25,26 +25,20 @@
 </template>
 
 <script type="text/javascript">
-import goodsBase from '@/components/goods/goods_base';
-import goodsDetail from '@/components/goods/goods_detail';
+// import goodsBase from '@/components/goods/goods_base';
+// import goodsDetail from '@/components/goods/goods_detail';
 import goodsImages from '@/components/goods/goods_images';
 export default {
-  components: { goodsBase, goodsDetail, goodsImages },
+  components: { goodsDetail, goodsImages },
   data() {
     return {
       activeName: 'images',
-      id: 1,
+      id: this.$route.query.id,
     }
   },
   created() {
-    // this.id = Number(this.$route.query.goods_commonid);
   },
   methods: {
-    //添加成功
-    baseSuccess(id) {
-      this.id = Number(id);
-      this.activeName = 'detail';
-    }
   }
 }
 </script>

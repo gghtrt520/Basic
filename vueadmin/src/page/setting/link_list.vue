@@ -108,7 +108,7 @@ export default {
     handleDetail(index) {
       this.$router.push({
         path: "/page/setting/link_list_edit",
-        param: { id: this.tableData[index].id },
+        query: { id: this.tableData[index].id },
       });
     },
     handleDelete(index, row) {

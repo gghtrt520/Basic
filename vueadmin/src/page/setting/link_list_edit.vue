@@ -61,8 +61,7 @@ export default {
       form: {
         name: '',
         href: '',
-        role_id: '',
-        id: 0,
+        loop_banner_id: 0,
       },
       idx: -1,
       id: 0,
@@ -76,12 +75,9 @@ export default {
   methods: {
     // 用户列表
     getData() {
-      this.$post_('setting/link/list', {}, (res) => {
+      this.$post_('setting/link/list', { link_category_id: this.$route.query.id }, (res) => {
         this.tableData = res.data;
       });
-    },
-    formatRole(row, column) {
-      return this.roleList[row.role_id];
     },
     //添加
     handleAdd() {

@@ -16,11 +16,14 @@
       <el-row>
         <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
           <el-form ref="form" :rules="rules" :model="form" label-width="100px">
-            <el-form-item label="文章标题">
+            <el-form-item label="文章标题" prop="title">
               <el-input v-model="form.title"></el-input>
             </el-form-item>
-            <el-form-item label="文章简述">
+            <el-form-item label="文章简述" prop="resume">
               <el-input v-model="form.resume"></el-input>
+            </el-form-item>
+            <el-form-item label="文章分类">
+              <el-cascader v-model="form.menu_id" :options="articleClass" :props="{value: 'id', label: 'label', multiple: true, checkStrictly: true }"></el-cascader>
             </el-form-item>
             <el-form-item label="文章Logo">
               <img :src="form.image" v-show="form.image" style="max-width: 150px;" />
@@ -59,14 +62,22 @@ export default {
         resume: '',
         image: '',
         content: '',
+        menu_id: '',
       },
       rules: {
         resume: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { required: true, message: '请输入文章简述', trigger: 'blur' },
+        ],
+        title: [
+          { required: true, message: '请输入文章标题', trigger: 'blur' },
         ],
       },
       articleId: 0,
       articleClass: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
     }
   },
   created() {
@@ -78,29 +89,27 @@ export default {
   methods: {
     getData() {
       this.ifload = true;
-      this.$post_('platform/article/article_class', {}, (res) => {
+      this.$post_('setting/menu/list', {}, (res) => {
         this.articleClass = res.data;
       })
       if (this.articleId < 1) {
         this.initFlag = true;
         this.ifload = false;
         return;
+      } else {
+        this.$post_('content/content/list', { id: this.articleId }, (res) => {
+          if (res.code == '0') {
+            console.log(res);
+            this.form.title = res.data[0].title;
+            this.form.resume = res.data[0].resume;
+            this.form.menu_id = res.data[0].menu_id;
+            this.form.image = res.data[0].image;
+            this.form.content = res.data[0].content;
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
       }
-
-
-      this.$post_('platform/article/article_info', { id: this.articleId }, (res) => {
-        if (res.code == '0') {
-          console.log(res);
-          this.form.title = res.data.title;
-          this.form.resume = res.data.resume;
-          this.form.image = res.data.image;
-          this.form.content = res.data.content;
-        } else {
-          this.$message.error(res.msg);
-        }
-        this.initFlag = true;
-        this.ifload = false;
-      })
 
     },
 
