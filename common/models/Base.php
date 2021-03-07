@@ -56,6 +56,9 @@ class Base extends \yii\db\ActiveRecord
     {
         $attributes = $this->attributes();
         $params = array_merge(Yii::$app->request->post(),Yii::$app->request->get());
+        if(isset($params['id'])){
+            unset($params['id']);
+        }
         if($params){
             foreach ($params as $key => $value) {
                 if(!in_array($key,$attributes)){

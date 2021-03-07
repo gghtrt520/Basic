@@ -31,6 +31,7 @@ class Link extends \common\models\Base
             [['link_category_id', 'name', 'href'], 'required'],
             [['link_category_id'], 'integer'],
             [['name', 'href'], 'string', 'max' => 255],
+            [['href'],'url']
         ];
     }
 

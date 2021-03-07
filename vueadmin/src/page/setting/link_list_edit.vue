@@ -61,7 +61,7 @@ export default {
       form: {
         name: '',
         href: '',
-        loop_banner_id: 0,
+        link_category_id: this.$route.query.id,
       },
       idx: -1,
       id: 0,
