@@ -18,6 +18,10 @@
                     <div class="user-info-list">上次登录时间：{{lastLogin*1000 | formatDate}}</div>
                 </el-card>
             </el-col>
+            <el-col :span="24">
+                <el-calendar v-model="value">
+                </el-calendar>
+            </el-col>
         </el-row>
 
         <!-- 编辑弹出框 -->
@@ -39,9 +43,6 @@
             </span>
         </el-dialog>
 
-        
-
-
     </div>
 </template>
 
@@ -61,6 +62,7 @@
                     id:0,
                 },
                 avatar:'',
+                value: new Date()
             }
         },
         components:{upload},
