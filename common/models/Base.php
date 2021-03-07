@@ -72,7 +72,8 @@ class Base extends \yii\db\ActiveRecord
             $params['id'] = $this->id;
             return $params;
         }else{
-            throw new \yii\base\InvalidValueException(reset($this->getErrors()));
+            $error = $this->getFirstErrors();
+            throw new \yii\base\InvalidValueException(reset($error));
         }
     }
 

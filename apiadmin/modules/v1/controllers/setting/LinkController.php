@@ -19,7 +19,7 @@ class LinkController extends \apiadmin\modules\v1\controllers\BaseController
         try {
             return $this->setSuccess($data->insertModel());
         } catch (\Exception $th) {
-            return $this->setError();
+            return $this->setError($th->getMessage());
         }
     }
 
