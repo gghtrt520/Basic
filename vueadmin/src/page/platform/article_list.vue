@@ -16,6 +16,11 @@
             <img :src="scope.row.image" width="40%" />
           </template>
         </el-table-column>
+        <el-table-column prop="is_available" align="center" label="审核">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.is_available" @change="availableChange(scope.row.id,scope.row.is_available)" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button type="text" icon="el-icon-document" @click="handleEidt(scope.row.id)">
@@ -60,11 +65,6 @@ export default {
       pages: 0,
       list: [],
 
-      form: {
-        img_url: '',
-        link: '',
-      },
-
       //当前操作对象
       curId: 0,
       curIndex: -1,
@@ -84,9 +84,11 @@ export default {
     getData() {
       this.ifload = true;
       this.$post_('content/content/list', {}, (res) => {
-        console.log(res);
         if (res.code == '0') {
-          this.list = res.data;
+          this.list = res.data.map(item => {
+            item.is_available = item.is_available == 1 ? true : false
+            return item
+          });;
           this.pages = Number(res.extend.pages);
           this.ifload = false;
         }
@@ -103,7 +105,13 @@ export default {
       this.$router.push({ path: '/page/platform/article_edit', query: { id: id } })
     },
 
-
+    availableChange(id, value) {
+      this.$post_('content/content/update', { id: id, is_available: (value ? 1 : 0) }, (res) => {
+        if (res.code == '0') {
+          this.$message.success(res.msg);
+        }
+      });
+    },
     //删除确认
     handleDel(index, row) {
       this.delVisible = true;
