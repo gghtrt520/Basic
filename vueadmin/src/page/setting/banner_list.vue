@@ -9,7 +9,7 @@
 
     <div class="container">
       <div class="op">
-        <el-button type="primary" @click="addDialog = true">添加轮播图分类</el-button>
+        <el-button type="success" icon="el-icon-circle-plus" @click="addDialog = true">添加轮播图分类</el-button>
         <el-dialog title="添加轮播图分类" :visible.sync="addDialog" width="30%">
           <el-form ref="form" :model="form" label-width="50px">
             <el-form-item label="描述">

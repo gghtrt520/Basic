@@ -3,7 +3,7 @@
     <div class="container" style="border: none;">
       <el-row style="margin-bottom: 10px;">
         <el-col :span="3">
-          <el-button type="success" icon="el-icon-plus" @click="handleEidt(0)">添加文章</el-button>
+          <el-button type="success" icon="el-icon-circle-plus" @click="handleEidt(0)">添加文章</el-button>
         </el-col>
       </el-row>
       <el-table :data="list" border v-loading="ifload">

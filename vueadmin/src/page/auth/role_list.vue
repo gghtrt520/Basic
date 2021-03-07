@@ -9,7 +9,7 @@
         <div class="container">
 
             <div>
-                <el-button icon="el-icon-add" @click="handleAdd"  type="success">添加</el-button>
+                <el-button icon="el-icon-circle-plus" @click="handleAdd"  type="success">添加</el-button>
             </div>
 
             <el-table :data="tableData" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
