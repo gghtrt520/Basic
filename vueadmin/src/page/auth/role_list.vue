@@ -16,7 +16,7 @@
 
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="id" label="序号" sortable width="150"></el-table-column>
-                <el-table-column prop="role_name" label="名称" width="160"> 
+                <el-table-column prop="role_name" label="名称" width="500"> 
                 </el-table-column>
                 <el-table-column prop="role_desc" label="描述">
                 </el-table-column>
@@ -117,7 +117,6 @@
             this.form.pid = 0;
             this.getData();
         },
-
         methods: {
             // 分页导航
             handleCurrentChange(val) {
@@ -140,7 +139,6 @@
                 this.id = 0;
                 this.editVisible = true;
             },
-
             //修改
             handleEdit(index, row) {
                 this.idx = index;
@@ -161,7 +159,6 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-
             // 保存编辑
             saveEdit() {
                 // console.log(this.form);return;
@@ -223,7 +220,6 @@
             }
         }
     }
-
 </script>
 
 <style scoped>
@@ -234,11 +230,9 @@
     .handle-box {
         margin-bottom: 20px;
     }
-
     .handle-select {
         width: 120px;
     }
-
     .handle-input {
         width: 300px;
         display: inline-block;
