@@ -56,8 +56,10 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      console.log(this.initContent);
-      this.content = this.initContent;
+      console.log(this.initContent)
+      setTimeout(() => {
+        this.content = this.initContent;
+      }, 200);
     })
   },
   methods: {

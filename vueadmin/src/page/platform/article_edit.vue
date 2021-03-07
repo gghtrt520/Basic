@@ -23,7 +23,7 @@
               <el-input v-model="form.resume"></el-input>
             </el-form-item>
             <el-form-item label="文章分类">
-              <el-cascader v-model="form.menu_id" :options="articleClass" :props="{value: 'id', label: 'label', multiple: true, checkStrictly: true }"></el-cascader>
+              <el-cascader v-model="form.menu_id" :options="articleClass" :props="{value: 'id', label: 'label', checkStrictly: true }"></el-cascader>
             </el-form-item>
             <el-form-item label="文章Logo">
               <img :src="form.image" v-show="form.image" style="max-width: 150px;" />
@@ -91,26 +91,26 @@ export default {
       this.ifload = true;
       this.$post_('setting/menu/list', {}, (res) => {
         this.articleClass = res.data;
-      })
-      if (this.articleId < 1) {
-        this.initFlag = true;
-        this.ifload = false;
-        return;
-      } else {
-        this.$post_('content/content/list', { id: this.articleId }, (res) => {
-          if (res.code == '0') {
-            console.log(res);
-            this.form.title = res.data[0].title;
-            this.form.resume = res.data[0].resume;
-            this.form.menu_id = res.data[0].menu_id;
-            this.form.image = res.data[0].image;
-            this.form.content = res.data[0].content;
-          } else {
-            this.$message.error(res.msg);
-          }
-        })
-      }
+        if (this.articleId < 1) {
+          this.ifload = false;
+        } else {
+          this.$post_('content/content/list', { id: this.articleId }, (res) => {
+            if (res.code == '0') {
+              console.log(res);
+              this.form.title = res.data[0].title;
+              this.form.resume = res.data[0].resume;
+              this.form.menu_id = res.data[0].menu_id;
+              this.form.image = res.data[0].image;
+              this.form.content = res.data[0].content;
+              this.ifload = false;
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.initFlag = true;
+          })
+        }
 
+      })
     },
 
     //获取编辑器内容
@@ -126,8 +126,9 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.form.id = this.articleId;
-          console.log(this.form);
-          this.$post_('content/content/add', this.form, (res) => {
+          let data = this.form;
+          data.menu_id = data.menu_id[0];
+          this.$post_('content/content/' + (this.articleId ? 'update' : 'add'), data, (res) => {
             if (res.code == '0') {
               this.$message.success(res.msg);
               this.ifload = false;

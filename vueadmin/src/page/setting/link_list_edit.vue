@@ -61,6 +61,7 @@ export default {
       form: {
         name: '',
         href: '',
+        loop_banner_id: this.$route.query.id,
         link_category_id: this.$route.query.id,
       },
       idx: -1,
@@ -83,9 +84,7 @@ export default {
     handleAdd() {
       this.form.name = '';
       this.form.href = '';
-      this.form.id = 0;
       this.idx = -1;
-      this.id = 0;
       this.editVisible = true;
     },
 
