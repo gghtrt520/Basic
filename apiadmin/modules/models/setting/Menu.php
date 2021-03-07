@@ -22,7 +22,7 @@ class Menu extends \common\models\Base
      */
     public static function tableName()
     {
-        return 'Menu';
+        return 'menu';
     }
 
     /**
