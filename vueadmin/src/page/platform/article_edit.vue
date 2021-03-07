@@ -11,7 +11,7 @@
     </div>
 
     <div class="container">
-      <el-page-header @back="$router.back(-1)" content="文章编辑" style="margin-bottom: 20px;">
+      <el-page-header @back="$router.back(-1)" :content="'文章'+(articleId>0?'编辑':'添加')" style="margin-bottom: 20px;">
       </el-page-header>
       <el-row>
         <el-col :xs="24" :sm="20" :md="20" :lg="20" :xl="20">
@@ -34,7 +34,7 @@
             </el-form-item>
 
             <el-form-item label="">
-              <el-button :loading="ifload" type="primary" @click="saveData">保存</el-button>
+              <el-button :loading="ifload" type="primary" @click="saveData">{{articleId>0?'编辑':'添加'}}</el-button>
             </el-form-item>
 
           </el-form>
