@@ -14,7 +14,7 @@
 
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column prop="id" label="序号" sortable width="150"></el-table-column>
-        <el-table-column prop="name" label="名称" width="160" :formatter="formatname"> </el-table-column>
+        <el-table-column prop="label" label="名称" width="160" :formatter="formatname"> </el-table-column>
         <el-table-column prop="path" label="路由"></el-table-column>
         <el-table-column prop="is_menu" label="是菜单" :formatter="formatter"></el-table-column>
         <el-table-column prop="sort" label="排序"></el-table-column>
@@ -38,7 +38,7 @@
     <el-dialog :title="idx>0?'编辑':'添加'" :visible.sync="editVisible" width="30%">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="名称">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.label"></el-input>
         </el-form-item>
         <el-form-item label="sort">
           <el-input v-model="form.sort"></el-input>
@@ -91,7 +91,7 @@ export default {
       delVisible: false,
       showIcon: false,
       form: {
-        name: '',
+        label: '',
         desc: '',
         path: '',
         is_menu: '1',
@@ -121,7 +121,7 @@ export default {
     // 获取 easy-mock 的模拟数据
     getData() {
       // console.log(this.form.pid);
-      this.$post_('admin/auth-rule/auth_rule_list', { pid: this.form.pid }, (res) => {
+      this.$post_('setting/menu/list', { pid: this.form.pid }, (res) => {
         // console.log(res);
         this.tableData = res.data;
       });
@@ -132,19 +132,19 @@ export default {
       return 'ok';
     },
     formatname(row, column) {
-      if (row.level < 1 || row.pid <= 0) return row.name;
+      if (row.level < 1 || row.pid <= 0) return row.label;
       let blank = "\xa0\xa0".repeat(row.level);
       let pre = blank + '|';
       let line = '-';
       let line2 = line.repeat(row.level);
-      return pre + line2 + row.name;
+      return pre + line2 + row.label;
     },
     formaticon(row, column) {
       return '<i class="' + row.icon + '"></i>';
     },
     //添加
     handleAdd() {
-      this.form.name = '';
+      this.form.label = '';
       this.form.path = '';
       this.form.desc = '';
       this.idx = -1;
@@ -158,7 +158,7 @@ export default {
       this.id = row.id;
       const item = this.tableData[index];
       this.form = {
-        name: item.name,
+        label: item.label,
         path: item.path,
         desc: item.desc,
         is_menu: item.is_menu,
@@ -181,7 +181,7 @@ export default {
     // 保存编辑
     saveEdit() {
       // console.log(this.form);return;
-      this.$post_('admin/auth-rule/add_auth_rule', this.form, (res) => {
+      this.$post_('setting/menu/add', this.form, (res) => {
         console.log(res);
         if (res.code == '0') {
           this.getData();
@@ -194,7 +194,7 @@ export default {
     },
     // 确定删除
     deleteRow() {
-      this.$post_('admin/auth-rule/del_auth_rule', { id: this.id }, (res) => {
+      this.$post_('setting/menu/delete', { id: this.id }, (res) => {
         console.log(res);
         if (res.code == '0') {
           this.$message.success(res.msg);

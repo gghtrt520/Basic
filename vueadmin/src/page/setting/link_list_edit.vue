@@ -61,7 +61,6 @@ export default {
       form: {
         name: '',
         href: '',
-        loop_banner_id: this.$route.query.id,
         link_category_id: this.$route.query.id,
       },
       idx: -1,
@@ -74,7 +73,7 @@ export default {
   },
 
   methods: {
-    // 用户列表
+    // 列表
     getData() {
       this.$post_('setting/link/list', { link_category_id: this.$route.query.id }, (res) => {
         this.tableData = res.data;
@@ -116,11 +115,7 @@ export default {
       this.$post_('setting/link/add', this.form, (res) => {
         console.log(res);
         if (res.code == '0') {
-          if (this.id < 1) {
-            // this.tableData.push(res.data);
-            this.getData();
-          }
-          if (this.id > 0) this.$set(this.tableData, this.idx, res.data);
+          this.getData();
           this.$message.success(res.msg);
         } else {
           this.$message.success(res.msg);

@@ -6,7 +6,7 @@
         <el-breadcrumb-item>
           <router-link to="/page/platform/article"> <i class="el-icon-lx-calendar"></i>文章列表</router-link>
         </el-breadcrumb-item>
-        <el-breadcrumb-item>文章编辑</el-breadcrumb-item>
+        <el-breadcrumb-item>文章{{articleId>0?'编辑':'添加'}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -92,6 +92,7 @@ export default {
       this.$post_('setting/menu/list', {}, (res) => {
         this.articleClass = res.data;
         if (this.articleId < 1) {
+          this.initFlag = true;
           this.ifload = false;
         } else {
           this.$post_('content/content/list', { id: this.articleId }, (res) => {
@@ -128,7 +129,7 @@ export default {
           this.form.id = this.articleId;
           let data = this.form;
           data.menu_id = data.menu_id[0];
-          this.$post_('content/content/' + (this.articleId ? 'update' : 'add'), data, (res) => {
+          this.$post_('content/content/' + (this.articleId > 0 ? 'update' : 'add'), data, (res) => {
             if (res.code == '0') {
               this.$message.success(res.msg);
               this.ifload = false;
