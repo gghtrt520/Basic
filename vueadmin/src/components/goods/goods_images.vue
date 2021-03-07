@@ -25,7 +25,7 @@ import loading from '@/components/utils/loading';
 export default {
   components: { loading },
   props: {
-    id: { type: Number, default: 0 },
+    id: { default: 0 },
   },
   data() {
     return {

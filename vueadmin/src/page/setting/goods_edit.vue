@@ -29,7 +29,7 @@
 // import goodsDetail from '@/components/goods/goods_detail';
 import goodsImages from '@/components/goods/goods_images';
 export default {
-  components: { goodsDetail, goodsImages },
+  components: { goodsImages },
   data() {
     return {
       activeName: 'images',
