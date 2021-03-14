@@ -83,7 +83,7 @@ export default {
   methods: {
     getData() {
       this.ifload = true;
-      this.$post_('content/content/list', {}, (res) => {
+      this.$post_('content/content/list', { page: this.page }, (res) => {
         if (res.code == '0') {
           this.list = res.data.map(item => {
             item.is_available = item.is_available == 1 ? true : false

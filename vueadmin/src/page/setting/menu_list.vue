@@ -85,7 +85,9 @@ export default {
     return {
       url: './static/vuetable.json',
       tableData: [],
-      cur_page: 1,
+      page: 1,
+      page_size: 10,
+      pages: 0,
       multipleSelection: [],
       editVisible: false,
       delVisible: false,
@@ -115,16 +117,19 @@ export default {
   methods: {
     // 分页导航
     handleCurrentChange(val) {
-      this.cur_page = val;
+      this.page = val;
       this.getData();
     },
-    // 获取 easy-mock 的模拟数据
     getData() {
-      // console.log(this.form.pid);
-      this.$post_('setting/menu/list', { pid: this.form.pid }, (res) => {
-        // console.log(res);
-        this.tableData = res.data;
-        this.tableData.name = res.data.lebel;
+      let params = { pid: this.form.pid, page: this.page, page_size: this.page_size };
+      this.$post_('setting/menu/list', params, (res) => {
+        if (res.code == "0") {
+          this.tableData = res.data.map(item => {
+            item.name = item.label;
+            return item
+          });;;
+          this.tableData.name = res.data.lebel;
+        }
       });
     },
     formatter(row, column) {
