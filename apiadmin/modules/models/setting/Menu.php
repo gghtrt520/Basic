@@ -85,8 +85,14 @@ class Menu extends \common\models\Base
         }
         $params['parent_id'] = 0;
         $find                = self::find()->filterWhere($params);
+        $params['page_size'] = Yii::$app->request->post('page_size',self::PAGE_SIZE);
+        $pagination   = new \yii\data\Pagination([
+            'totalCount' => $find->count(),
+            'pageSize'   => $params['page_size'],
+            'page'       => Yii::$app->request->post('page',0)-1
+        ]);
         $page = $find->count();
-        $all  = $find->all();
+        $all  = $find->offset($pagination->offset)->limit($pagination->limit)->all();
         if($all){
             foreach ($all as $value) {
                 $data['id']         = $value->id;
