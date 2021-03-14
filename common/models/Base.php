@@ -44,7 +44,7 @@ class Base extends \yii\db\ActiveRecord
             'totalCount' => $find->count(),
             'pageSize'   => $params['page_size'],
         ]);
-        $pagination->setPage(Yii::$app->request->post('page'-1,0),true);
+        $pagination->setPage(Yii::$app->request->post('page',0)-1,true);
         $page = $find->count();
         return $find->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
     }
