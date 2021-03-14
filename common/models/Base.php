@@ -43,8 +43,8 @@ class Base extends \yii\db\ActiveRecord
         $pagination   = new \yii\data\Pagination([
             'totalCount' => $find->count(),
             'pageSize'   => $params['page_size'],
+            'page'       => Yii::$app->request->post('page',0)-1
         ]);
-        $pagination->setPage(Yii::$app->request->post('page',0)-1,true);
         $page = $find->count();
         return $find->offset($pagination->offset)->limit($pagination->limit)->asArray()->all();
     }
