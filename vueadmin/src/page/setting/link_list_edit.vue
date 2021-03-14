@@ -54,7 +54,9 @@ export default {
   data() {
     return {
       tableData: [],
-      cur_page: 1,
+      page: 1,
+      page_size: 10,
+      total: 0,
       multipleSelection: [],
       editVisible: false,
       delVisible: false,
@@ -73,10 +75,18 @@ export default {
   },
 
   methods: {
+    // 分页导航
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getData();
+    },
     // 列表
     getData() {
-      this.$post_('setting/link/list', { link_category_id: this.$route.query.id }, (res) => {
+      let params = { link_category_id: this.$route.query.id, page: this.page, page_size: this.page_size };
+      this.$post_('setting/link/list', params, (res) => {
         this.tableData = res.data;
+        this.total = Number(res.extend.pages);
+        this.tableData.name = res.data.lebel;
       });
     },
     //添加

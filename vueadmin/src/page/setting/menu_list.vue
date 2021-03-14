@@ -26,12 +26,16 @@
 
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="addSub(scope.$index, scope.row)">添加子菜单</el-button>
+            <el-button v-if="form.is_menu == 1" type="text" icon="el-icon-edit" @click="addSub(scope.$index, scope.row)">添加子菜单</el-button>
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total" :page-size="page_size">
+        </el-pagination>
+      </div>
     </div>
 
     <!-- 编辑弹出框 -->
@@ -72,22 +76,18 @@
         <el-button type="primary" @click="deleteRow">确 定</el-button>
       </span>
     </el-dialog>
-    <icon @selectIcon="selectIcon" v-show="showIcon"></icon>
   </div>
 </template>
 
 <script>
-import icon from '@/page/common/icon';
 export default {
-  name: 'basetable',
-  components: { icon },
   data() {
     return {
       url: './static/vuetable.json',
       tableData: [],
       page: 1,
       page_size: 10,
-      pages: 0,
+      total: 0,
       multipleSelection: [],
       editVisible: false,
       delVisible: false,
@@ -107,9 +107,6 @@ export default {
     }
   },
   created() {
-    this.getData();
-  },
-  activated() {
     this.form.pid = 0;
     this.getData();
   },
@@ -127,7 +124,8 @@ export default {
           this.tableData = res.data.map(item => {
             item.name = item.label;
             return item
-          });;;
+          });
+          this.total = Number(res.extend.pages);
           this.tableData.name = res.data.lebel;
         }
       });

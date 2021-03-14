@@ -22,6 +22,10 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total" :page-size="page_size">
+        </el-pagination>
+      </div>
     </div>
 
     <!-- 编辑弹出框 -->
@@ -53,7 +57,9 @@ export default {
   data() {
     return {
       tableData: [],
-      cur_page: 1,
+      page: 1,
+      page_size: 10,
+      total: 0,
       multipleSelection: [],
       editVisible: false,
       delVisible: false,
@@ -72,12 +78,20 @@ export default {
   },
 
   methods: {
+    // 分页导航
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getData();
+    },
     // 友情链接分类列表
     getData() {
-      this.$post_('setting/link-category/list', {}, (res) => {
+      let params = { page: this.page, page_size: this.page_size };
+      this.$post_('setting/link-category/list', params, (res) => {
         console.log(res);
         this.tableData = res.data;
         this.roleList = res.extend.role_list;
+        this.total = Number(res.extend.pages);
+        this.tableData.name = res.data.lebel;
       });
     },
     formatRole(row, column) {
