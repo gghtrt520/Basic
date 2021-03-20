@@ -45,7 +45,7 @@ class AuthRuleController extends CoreController
 
 		}else{
 			$error = $authRule->getErrors();
-			$errMsg = $this->model_errors($errMsg);
+			$errMsg = $this->model_errors($error);
 			$this->error($errMsg);
 		}
 	}

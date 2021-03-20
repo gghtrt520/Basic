@@ -57,7 +57,7 @@ class UserController extends CoreController
 
 		}else{
 			$error = $user->getErrors();
-			$errMsg = $this->model_errors($errMsg);
+			$errMsg = $this->model_errors($error);
 			$this->error($errMsg);
 		}		
 	}
