@@ -7,16 +7,16 @@
         </el-col>
       </el-row>
       <el-table :data="list" border v-loading="ifload">
-        <el-table-column prop="title" label="标题" align="center" width="220">
+        <el-table-column prop="title" label="标题" align="center" width="360">
         </el-table-column>
-        <el-table-column prop="resume" align="center" label="描述" width="260">
+        <el-table-column prop="resume" align="center" label="描述" width="600">
         </el-table-column>
         <el-table-column prop="image" align="center" label="Logo图" width="120">
           <template slot-scope="scope">
             <img :src="scope.row.image" width="40%" />
           </template>
         </el-table-column>
-        <el-table-column prop="is_available" align="center" label="审核">
+        <el-table-column prop="is_available" align="center" label="审核" width="120">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.is_available" @change="availableChange(scope.row.id,scope.row.is_available)" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
           </template>
