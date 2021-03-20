@@ -138,7 +138,7 @@ export default {
     formatname(row, column) {
       if (row.level < 1 || row.pid <= 0) return row.name;
       let blank = "\xa0\xa0".repeat(row.level);
-      let pre = blank + '|';
+      let pre = blank;
       let line = '-';
       let line2 = line.repeat(row.level);
       return pre + line2 + row.name;
