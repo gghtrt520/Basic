@@ -12,17 +12,17 @@
       </div>
       <el-table :data="tableData" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
 
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column prop="id" label="序号" sortable width="150"></el-table-column>
+        <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
+        <el-table-column prop="id" label="序号" sortable width="100" align="center"></el-table-column>
         <el-table-column prop="name" label="名称" width="160" :formatter="formatname"> </el-table-column>
         <el-table-column prop="path" label="路由"></el-table-column>
-        <!-- <el-table-column prop="is_menu" label="是菜单" :formatter="formatter"></el-table-column> -->
+        <!-- <el-table-column prop="is_menu" label="是菜单"></el-table-column> -->
         <el-table-column prop="sort" label="排序"></el-table-column>
-        <el-table-column prop="icon" label="图标">
+        <!-- <el-table-column prop="icon" label="图标">
           <template slot-scope="scope">
             <i :class="scope.row.icon"></i>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
@@ -50,10 +50,10 @@
         <el-form-item label="路由">
           <el-input v-model="form.path"></el-input>
         </el-form-item>
-        <el-form-item label="图标">
+        <!-- <el-form-item label="图标">
           <i :class="form.icon"></i>
           <span @click="showIcon=true">选择图标</span>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item label="描述">
           <el-input v-model="form.desc"></el-input>
         </el-form-item> -->
@@ -97,7 +97,6 @@ export default {
         desc: '',
         path: '',
         is_menu: '1',
-        pid: 0,
         id: 0,
         icon: '',
       },
@@ -107,7 +106,6 @@ export default {
     }
   },
   created() {
-    this.form.pid = 0;
     this.getData();
   },
 
@@ -118,7 +116,7 @@ export default {
       this.getData();
     },
     getData() {
-      let params = { pid: this.form.pid, page: this.page, page_size: this.page_size };
+      let params = { page: this.page, page_size: this.page_size };
       this.$post_('setting/menu/list', params, (res) => {
         if (res.code == "0") {
           this.tableData = res.data.map(item => {
@@ -130,18 +128,8 @@ export default {
         }
       });
     },
-    formatter(row, column) {
-      // console.log(row);
-      return row.is_menu == '1' ? '是' : '否';
-      return 'ok';
-    },
-    formatname(row, column) {
-      if (row.level < 1 || row.pid <= 0) return row.name;
-      let blank = "\xa0\xa0".repeat(row.level);
-      let pre = blank;
-      let line = '-';
-      let line2 = line.repeat(row.level);
-      return pre + line2 + row.name;
+    formatname(row,) {
+      return '|' + row.name;
     },
     formaticon(row, column) {
       return '<i class="' + row.icon + '"></i>';
@@ -168,7 +156,6 @@ export default {
         is_menu: item.is_menu,
         sort: item.sort,
         id: this.id,
-        pid: row.pid,
         icon: item.icon,
       }
       this.editVisible = true;
@@ -185,8 +172,7 @@ export default {
     // 保存编辑
     saveEdit() {
       // console.log(this.form);return;
-      this.$post_('setting/menu/add', this.form, (res) => {
-        console.log(res);
+      this.$post_('setting/menu/' + (this.id == 0 ? 'add' : 'update'), this.form, (res) => {
         if (res.code == '0') {
           this.getData();
           this.$message.success(res.msg);
@@ -209,16 +195,12 @@ export default {
       this.delVisible = false;
       this.tableData.splice(this.idx, 1);
     },
-    //添加字菜单
-    addSub(index, row) {
+    //添加子菜单
+    addSub(index) {
       this.$router.push({
         path: '/page/setting/menu_list_children',
-        query: row
+        query: { index: index }
       })
-      // this.form.pid = row.id;
-      // this.form.id = 0;
-      // this.id = 0;
-      // this.handleAdd();
     },
 
     selectIcon(icon) {

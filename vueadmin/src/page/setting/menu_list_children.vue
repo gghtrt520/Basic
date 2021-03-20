@@ -8,25 +8,27 @@
     </div>
     <div class="container">
       <div>
-        <el-button icon="el-icon-add" @click="handleAdd" type="success">添加</el-button>
+        <el-button @click="handleAdd" type="success">添加</el-button>
+        <el-button class="reback" type="success">
+          <router-link to="/page/setting/menu_list">返回</router-link>
+        </el-button>
       </div>
       <el-table :data="tableData" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
 
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column prop="id" label="序号" sortable width="150"></el-table-column>
+        <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
+        <el-table-column prop="id" label="序号" sortable width="100" align="center"></el-table-column>
         <el-table-column prop="name" label="名称" width="160" :formatter="formatname"> </el-table-column>
         <el-table-column prop="path" label="路由"></el-table-column>
-        <!-- <el-table-column prop="is_menu" label="是菜单" :formatter="formatter"></el-table-column> -->
+        <!-- <el-table-column prop="is_menu" label="是菜单"></el-table-column> -->
         <el-table-column prop="sort" label="排序"></el-table-column>
-        <el-table-column prop="icon" label="图标">
+        <!-- <el-table-column prop="icon" label="图标">
           <template slot-scope="scope">
             <i :class="scope.row.icon"></i>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
-            <!-- <el-button v-if="form.is_menu == 1" type="text" icon="el-icon-edit" @click="addSub(scope.$index, scope.row)">添加子菜单</el-button> -->
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
@@ -50,10 +52,10 @@
         <el-form-item label="路由">
           <el-input v-model="form.path"></el-input>
         </el-form-item>
-        <el-form-item label="图标">
+        <!-- <el-form-item label="图标">
           <i :class="form.icon"></i>
           <span @click="showIcon=true">选择图标</span>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item label="描述">
           <el-input v-model="form.desc"></el-input>
         </el-form-item> -->
@@ -96,22 +98,18 @@ export default {
         name: '',
         desc: '',
         path: '',
-        is_menu: '',
+        is_menu: '1',
         id: 0,
         icon: '',
       },
       idx: -1,
       id: 0,
+      parent_id: 0,
       level: -1,
     }
   },
   created() {
-    this.tableData = this.$route.query.children || [];
-    this.tableData = this.tableData.map(item => {
-      item.name = item.label;
-      return item
-    });
-    this.id = this.$route.query.id;
+    this.getData();
   },
 
   methods: {
@@ -121,28 +119,21 @@ export default {
       this.getData();
     },
     getData() {
-      // let params = { pid: this.form.pid, page: this.page, page_size: this.page_size };
-      // this.$post_('setting/menu/list', params, (res) => {
-      //   if (res.code == "0") {
-      //     this.tableData = res.data.map(item => {
-      //       item.name = item.label;
-      //       return item
-      //     });
-      //     this.total = Number(res.extend.pages);
-      //     this.tableData.name = res.data.lebel;
-      //   }
-      // });
+      let params = { page: this.page, page_size: this.page_size };
+      this.$post_('setting/menu/list', params, (res) => {
+        if (res.code == "0") {
+          this.parent_id = res.data[this.$route.query.index].id;
+          this.tableData = res.data[this.$route.query.index].children.map(item => {
+            item.name = item.label;
+            return item
+          });
+          this.total = 0;
+          this.tableData.name = res.data.lebel;
+        }
+      });
     },
-    formatter(row, column) {
-      return row.is_menu == '1' ? '是' : '否';
-    },
-    formatname(row, column) {
-      if (row.level < 1 || row.pid <= 0) return row.name;
-      let blank = "\xa0\xa0".repeat(row.level);
-      let pre = blank + '|';
-      let line = '-';
-      let line2 = line.repeat(row.level);
-      return pre + line2 + row.name;
+    formatname(row,) {
+      return '|' + row.name;
     },
     formaticon(row, column) {
       return '<i class="' + row.icon + '"></i>';
@@ -153,12 +144,14 @@ export default {
       this.form.path = '';
       this.form.desc = '';
       this.idx = -1;
+      this.id = 0;
       this.editVisible = true;
     },
 
     //修改
     handleEdit(index, row) {
       this.idx = index;
+      this.id = row.id;
       const item = this.tableData[index];
       this.form = {
         name: item.name,
@@ -166,13 +159,13 @@ export default {
         desc: item.desc,
         is_menu: item.is_menu,
         sort: item.sort,
-        parent_id: this.id,
-        id: row.id,
+        id: this.id,
         icon: item.icon,
       }
       this.editVisible = true;
     },
     handleDelete(index, row) {
+      this.id = row.id;
       this.idx = index;
       this.delVisible = true;
     },
@@ -182,9 +175,10 @@ export default {
 
     // 保存编辑
     saveEdit() {
-      this.form.parent_id = this.id;
-      this.$post_('setting/menu/add', this.form, (res) => {
+      this.form.parent_id = this.parent_id;
+      this.$post_('setting/menu/' + (this.id == 0 ? 'add' : 'update'), this.form, (res) => {
         if (res.code == '0') {
+          this.getData();
           this.$message.success(res.msg);
         } else {
           this.$message.success(res.msg);
@@ -194,7 +188,7 @@ export default {
     },
     // 确定删除
     deleteRow() {
-      this.$post_('setting/menu/delete', { id: this.id }, (res) => {
+      this.$post_('setting/menu/delete', { id: this.id, parent_id: this.parent_id }, (res) => {
         console.log(res);
         if (res.code == '0') {
           this.$message.success(res.msg);
@@ -205,11 +199,12 @@ export default {
       this.delVisible = false;
       this.tableData.splice(this.idx, 1);
     },
-
     //添加子菜单
-    addSub() {
-      this.form.id = 0;
-      this.handleAdd();
+    addSub(index, row) {
+      window.localStorage.menuData = JSON.stringify(row);
+      this.$router.push({
+        path: '/page/setting/menu_list_children',
+      })
     },
 
     selectIcon(icon) {
@@ -223,6 +218,15 @@ export default {
 </script>
 
 <style scoped>
+.reback {
+  padding: 0;
+}
+.reback span a {
+  padding: 9px 15px;
+  color: #fff;
+  display: inline-block;
+  height: 100%;
+}
 .iconfont {
   font-size: 20px;
   /*font-weight: bold;*/
