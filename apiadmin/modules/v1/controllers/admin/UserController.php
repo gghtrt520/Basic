@@ -83,6 +83,7 @@ class UserController extends CoreController
 			'user_name' => $this->_user['user_name'],
 			'lastLogin' => $this->_user['last_login_time'],
 			'id'		=> $this->_uid,
+			'role_id'   => $this->_user['role_id'],
 			'avatar'	=> $this->_user['avatar'],
 		];
 		$this->out('用户信息',$data);
