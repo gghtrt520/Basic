@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item><i class="el-icon-lx-cascades"></i>网站设置</el-breadcrumb-item>
-        <el-breadcrumb-item>菜单设置</el-breadcrumb-item>
+        <el-breadcrumb-item>子菜单设置</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="container">
@@ -26,16 +26,16 @@
 
         <el-table-column label="操作" width="240" align="center">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="addSub(scope.$index, scope.row)">子菜单</el-button>
+            <!-- <el-button v-if="form.is_menu == 1" type="text" icon="el-icon-edit" @click="addSub(scope.$index, scope.row)">添加子菜单</el-button> -->
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <!-- <div class="pagination">
         <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total" :page-size="page_size">
         </el-pagination>
-      </div>
+      </div> -->
     </div>
 
     <!-- 编辑弹出框 -->
@@ -96,8 +96,7 @@ export default {
         name: '',
         desc: '',
         path: '',
-        is_menu: '1',
-        pid: 0,
+        is_menu: '',
         id: 0,
         icon: '',
       },
@@ -107,8 +106,12 @@ export default {
     }
   },
   created() {
-    this.form.pid = 0;
-    this.getData();
+    this.tableData = this.$route.query.children || [];
+    this.tableData = this.tableData.map(item => {
+      item.name = item.label;
+      return item
+    });
+    this.id = this.$route.query.id;
   },
 
   methods: {
@@ -118,22 +121,20 @@ export default {
       this.getData();
     },
     getData() {
-      let params = { pid: this.form.pid, page: this.page, page_size: this.page_size };
-      this.$post_('setting/menu/list', params, (res) => {
-        if (res.code == "0") {
-          this.tableData = res.data.map(item => {
-            item.name = item.label;
-            return item
-          });
-          this.total = Number(res.extend.pages);
-          this.tableData.name = res.data.lebel;
-        }
-      });
+      // let params = { pid: this.form.pid, page: this.page, page_size: this.page_size };
+      // this.$post_('setting/menu/list', params, (res) => {
+      //   if (res.code == "0") {
+      //     this.tableData = res.data.map(item => {
+      //       item.name = item.label;
+      //       return item
+      //     });
+      //     this.total = Number(res.extend.pages);
+      //     this.tableData.name = res.data.lebel;
+      //   }
+      // });
     },
     formatter(row, column) {
-      // console.log(row);
       return row.is_menu == '1' ? '是' : '否';
-      return 'ok';
     },
     formatname(row, column) {
       if (row.level < 1 || row.pid <= 0) return row.name;
@@ -152,14 +153,12 @@ export default {
       this.form.path = '';
       this.form.desc = '';
       this.idx = -1;
-      this.id = 0;
       this.editVisible = true;
     },
 
     //修改
     handleEdit(index, row) {
       this.idx = index;
-      this.id = row.id;
       const item = this.tableData[index];
       this.form = {
         name: item.name,
@@ -167,14 +166,13 @@ export default {
         desc: item.desc,
         is_menu: item.is_menu,
         sort: item.sort,
-        id: this.id,
-        pid: row.pid,
+        parent_id: this.id,
+        id: row.id,
         icon: item.icon,
       }
       this.editVisible = true;
     },
     handleDelete(index, row) {
-      this.id = row.id;
       this.idx = index;
       this.delVisible = true;
     },
@@ -184,11 +182,9 @@ export default {
 
     // 保存编辑
     saveEdit() {
-      // console.log(this.form);return;
+      this.form.parent_id = this.id;
       this.$post_('setting/menu/add', this.form, (res) => {
-        console.log(res);
         if (res.code == '0') {
-          this.getData();
           this.$message.success(res.msg);
         } else {
           this.$message.success(res.msg);
@@ -209,16 +205,11 @@ export default {
       this.delVisible = false;
       this.tableData.splice(this.idx, 1);
     },
-    //添加字菜单
-    addSub(index, row) {
-      this.$router.push({
-        path: '/page/setting/menu_list_children',
-        query: row
-      })
-      // this.form.pid = row.id;
-      // this.form.id = 0;
-      // this.id = 0;
-      // this.handleAdd();
+
+    //添加子菜单
+    addSub() {
+      this.form.id = 0;
+      this.handleAdd();
     },
 
     selectIcon(icon) {

@@ -106,8 +106,6 @@ export default {
     this.getData();
   },
   activated() {
-    // this.form.pid = 0;
-    // this.getData();
   },
   methods: {
     // 分页导航
