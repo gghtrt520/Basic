@@ -31,10 +31,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="pages" :page-size="page_size">
-        </el-pagination>
-      </div>
     </div>
 
     <!-- 编辑弹出框 -->
