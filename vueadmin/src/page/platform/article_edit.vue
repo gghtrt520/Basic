@@ -4,7 +4,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item><i class="el-icon-lx-calendar"></i>平台管理</el-breadcrumb-item>
         <el-breadcrumb-item>
-          <router-link to="/page/platform/article"> <i class="el-icon-lx-calendar"></i>文章列表</router-link>
+          <router-link to="/page/platform/article_list"> <i class="el-icon-lx-calendar"></i>文章列表</router-link>
         </el-breadcrumb-item>
         <el-breadcrumb-item>文章{{articleId>0?'编辑':'添加'}}</el-breadcrumb-item>
       </el-breadcrumb>

@@ -13,7 +13,7 @@
         </el-table-column>
         <el-table-column prop="image" align="center" label="Logo图">
           <template slot-scope="scope">
-            <img :src="scope.row.image" width="40%" />
+            <img :src="scope.row.image" width="30px" />
           </template>
         </el-table-column>
         <el-table-column v-if="roleId == 1" prop="is_available" align="center" label="审核" width="80">
