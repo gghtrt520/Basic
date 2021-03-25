@@ -64,7 +64,9 @@ class Menu extends \common\models\Base
                 $one['parent_id']  = $value->parent_id;
                 $one['path']       = $value->path;
                 $one['sort']       = $value->sort;
-                $one['content']    = $value->content;
+                if(Yii::$app->controller->id == 'api/frontend'){
+                    $one['content']    = $value->content;
+                }
                 $return[] = $one;
             }
         }
@@ -95,7 +97,9 @@ class Menu extends \common\models\Base
                 $data['path']       = $value->path;
                 $data['sort']       = $value->sort;
                 $data['children']   = $value->getSubMenu();
-                $data['content']    = $value->content;
+                if(Yii::$app->controller->id == 'api/frontend'){
+                    $data['content']    = $value->content;
+                }
                 $return[] = $data;
             }
         }
