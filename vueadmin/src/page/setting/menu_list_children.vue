@@ -133,7 +133,7 @@ export default {
       });
     },
     formatname(row,) {
-      return '|' + row.name;
+      return  row.name;
     },
     formaticon(row, column) {
       return '<i class="' + row.icon + '"></i>';
