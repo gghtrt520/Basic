@@ -84,14 +84,8 @@ class Menu extends \common\models\Base
         }
         $params['parent_id'] = 0;
         $find                = self::find()->filterWhere($params);
-        $params['page_size'] = Yii::$app->request->post('page_size',self::PAGE_SIZE);
-        $pagination   = new \yii\data\Pagination([
-            'totalCount' => $find->count(),
-            'pageSize'   => $params['page_size'],
-            'page'       => Yii::$app->request->post('page',0)-1
-        ]);
         $page = $find->count();
-        $all  = $find->offset($pagination->offset)->limit($pagination->limit)->all();
+        $all  = $find->all();
         if($all){
             foreach ($all as $value) {
                 $data['id']         = $value->id;
@@ -100,9 +94,16 @@ class Menu extends \common\models\Base
                 $data['path']       = $value->path;
                 $data['sort']       = $value->sort;
                 $data['children']   = $value->getSubMenu();
+                $data['content']    = $value->content;
                 $return[] = $data;
             }
         }
         return $return?:[];
+    }
+
+
+    public function getContent()
+    {
+        return $this->hasMany(\apiadmin\modules\models\content\Content::className(),['menu_id'=>'id'])->limit(10);
     }
 }
