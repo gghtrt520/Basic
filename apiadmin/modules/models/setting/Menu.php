@@ -64,6 +64,7 @@ class Menu extends \common\models\Base
                 $one['parent_id']  = $value->parent_id;
                 $one['path']       = $value->path;
                 $one['sort']       = $value->sort;
+                $one['content']    = $value->content;
                 $return[] = $one;
             }
         }
