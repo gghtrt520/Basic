@@ -41,4 +41,14 @@ class LinkCategory extends \common\models\Base
             'category' => 'Category',
         ];
     }
+
+    public function getLink()
+    {
+        return $this->hasMany(Link::className(),['link_category_id'=>'id']);
+    }
+
+    public static function getAll()
+    {
+        return self::find()->joinWith('link')->asArray()->all();
+    }
 }

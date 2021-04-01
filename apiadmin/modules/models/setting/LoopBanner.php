@@ -41,4 +41,14 @@ class LoopBanner extends \common\models\Base
             'title' => 'Title',
         ];
     }
+
+    public function getBanner()
+    {
+        return $this->hasMany(BannerList::className(),['loop_banner_id'=>'id']);
+    }
+
+    public static function getAll()
+    {
+        return self::find()->joinWith('banner')->asArray()->all();
+    }
 }
