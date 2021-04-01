@@ -31,4 +31,15 @@ class FrontendController extends \apiadmin\modules\v1\controllers\BaseController
         ];
         return $this->setSuccess($data->searchModel($this->pages),$extend);
     }
+
+    public function actionContent()
+    {
+        $id = Yii::$app->request->get('id');
+        if($content = \apiadmin\modules\models\content\Content::findOne($id)){
+            $content->updateCounters(['times' => 1]);
+            return $this->setSuccess($content);
+        }else {
+            return $this->setError('数据未找到');
+        }
+    }
 }

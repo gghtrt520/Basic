@@ -47,11 +47,11 @@ class Content extends \common\models\Base
     public function rules()
     {
         return [
-            [['title', 'content','resume'], 'required'],
+            [['title', 'resume', 'content'], 'required'],
             [['content', 'is_available'], 'string'],
-            [['menu_id', 'user_id'], 'integer'],
+            [['menu_id', 'user_id', 'times'], 'integer'],
             [['create_time'], 'safe'],
-            [['title', 'image','resume'], 'string', 'max' => 255],
+            [['title', 'resume', 'image'], 'string', 'max' => 255],
         ];
     }
 
@@ -61,15 +61,16 @@ class Content extends \common\models\Base
     public function attributeLabels()
     {
         return [
-            'id'           => 'ID',
-            'title'        => 'Title',
-            'resume'       => 'Resume',
-            'content'      => 'Content',
-            'image'        => 'Image',
+            'id' => 'ID',
+            'title' => 'Title',
+            'resume' => 'Resume',
+            'content' => 'Content',
+            'image' => 'Image',
             'is_available' => 'Is Available',
-            'menu_id'      => 'Menu ID',
-            'user_id'      => 'User ID',
-            'create_time'  => 'Create Time',
+            'menu_id' => 'Menu ID',
+            'user_id' => 'User ID',
+            'times' => 'Times',
+            'create_time' => 'Create Time',
         ];
     }
 
@@ -90,4 +91,5 @@ class Content extends \common\models\Base
         }
         return false;
     }
+
 }
