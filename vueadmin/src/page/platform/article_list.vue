@@ -133,9 +133,9 @@ export default {
         console.log(res);
         if (res.code == '0') {
           this.$message.success(res.msg);
-          this.list.splice(this.curIndex, 1);
           this.ifload = false;
           this.delVisible = false;
+          this.getData();
         } else {
           this.$message.error(res.msg);
         }

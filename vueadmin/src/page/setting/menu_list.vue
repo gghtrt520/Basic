@@ -187,13 +187,13 @@ export default {
       this.$post_('setting/menu/delete', { id: this.id }, (res) => {
         console.log(res);
         if (res.code == '0') {
+          this.getData();
           this.$message.success(res.msg);
         } else {
           this.$message.warning(res.msg);
         }
       })
       this.delVisible = false;
-      this.tableData.splice(this.idx, 1);
     },
     //添加子菜单
     addSub(index) {

@@ -34,7 +34,7 @@
             </el-form-item>
 
             <el-form-item label="">
-              <el-button :loading="ifload" type="primary" @click="saveData">{{articleId>0?'编辑':'添加'}}</el-button>
+              <el-button :loading="ifload" type="primary" @click="saveData">{{articleId>0?'保存':'添加'}}</el-button>
             </el-form-item>
 
           </el-form>
@@ -81,6 +81,13 @@ export default {
     }
   },
   created() {
+    this.$post_('api/frontend/list', {}, (res) => {
+      if (res.code == '0') {
+        console.log(res)
+      } else {
+        this.$message.error(res.msg);
+      }
+    })
     this.articleId = this.$route.query.id;
     this.$nextTick(() => {
       this.getData();
@@ -128,7 +135,12 @@ export default {
         if (valid) {
           this.form.id = this.articleId;
           let data = this.form;
-          data.menu_id = data.menu_id[0];
+          //选二级的时候会返回[15,38]这样的数据
+          if (data.menu_id.length>1){
+            data.menu_id = data.menu_id[data.menu_id.length-1];
+          } else {
+            data.menu_id = data.menu_id[0];
+          }
           this.$post_('content/content/' + (this.articleId > 0 ? 'update' : 'add'), data, (res) => {
             if (res.code == '0') {
               this.$message.success(res.msg);

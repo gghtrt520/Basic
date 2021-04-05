@@ -44,8 +44,9 @@ header {
   font-size: 0.1rem;
 }
 
-#myCarousel .bd-placeholder-img {
-  width: 100%;
+#myCarousel img {
+  height: 400px;
+  object-fit: cover;
 }
 
 .guide-left {
@@ -70,6 +71,9 @@ header {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 #carouselExampleCaptions .carousel-caption {
   width: 100%;
@@ -92,6 +96,8 @@ header {
 
 .nav-new {
   margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
 }
 .nav-new .nav-link.active,
 .nav-new .show > .nav-link {
@@ -99,7 +105,7 @@ header {
 }
 .nav-new .nav-item > a {
   color: #000;
-  padding: 0.2rem 0.7rem;
+  padding: 0.2rem 0.5rem;
 }
 .nav-new .nav-item > a:hover {
   color: #d42d26;
@@ -113,7 +119,7 @@ header {
 }
 #pills-new-tabContent .media > img {
   height: 100%;
-  width: 35%;
+  width: 140px;
   object-fit: cover;
 }
 #pills-new-tabContent .media-body > p {
@@ -125,6 +131,7 @@ header {
 .news-name {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .news-time {
   font-weight: normal;
@@ -194,27 +201,17 @@ header {
 .min-logo {
   display: none;
 }
-@media (max-width: 992px) {
-  body {
-    padding-top: 3.7rem;
-  }
-  .container.header-top {
-    display: none;
-  }
-  .min-logo {
-    display: block;
-    color: #fff;
-  }
-  .logo-img {
-    width: 50px;
-  }
-  .navbar .navbar-collapse {
-    margin-top: 10px;
-  }
-  .navbar .navbar-nav > .nav-item {
-    margin: 3px 0;
-  }
+
+#carouselExampleCaptions .carousel-item img{
+  height: 480px;
+  object-fit: cover;
 }
+/* @media (min-width: 768px){
+  #carouselExampleCaptions .carousel-item img{
+    max-height: 500px;
+    object-fit: cover;
+  }
+} */
 
 .links-box select {
   width: 100%;
@@ -235,10 +232,28 @@ header {
   padding: 5px 1.25rem;
 }
 
+.social-wrap .card-text{
+  font-size: 12px;
+  height: 30px;
+}
+.social-wrap img{
+  height:120px;
+  object-fit: cover;
+}
+
+.safety-production img{
+  height: 200px;
+  width:100%;
+  object-fit: cover;
+}
+.safety-production .card-text{
+  height: 80px;
+  font-size: 12px;
+}
 footer {
   background-color: #d42d26;
   color: #fff;
-  padding: 20px;
+  padding: 20px 5px;
 }
 .footer-left > div {
   font-size: 14px;
@@ -252,10 +267,30 @@ footer > div > p {
 }
 
 /* 公共 */
+.title-line{
+  height: 1px;
+  flex: auto;
+  margin: 0 10px;
+  border-top: 1px solid #ccc;
+}
+.btn-more{
+  font-size: 12px;
+  border-radius: 50px;
+  padding: 0px 10px;
+}
+.shadow-sm{
+  box-shadow: 0 0 0.325rem #e4e4e4 !important;
+  border-color: #ece8e8 !important;
+}
+.a-href{
+  cursor: pointer;
+}
 .carousel-indicators li {
-  width: 10px;
-  height: 10px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
+  border:none;
+  box-shadow: 0 0 5px #656565;
 }
 .carousel-indicators .active {
   background-color: #d42d26;
@@ -264,4 +299,42 @@ footer > div > p {
 .carousel-control-next,
 .carousel-control-prev {
   z-index: 1;
+}
+
+@media (max-width: 992px) {
+  body {
+    padding-top: 3.7rem;
+  }
+  .container.header-top {
+    display: none;
+  }
+  .min-logo {
+    display: block;
+    color: #fff;
+  }
+  .logo-img {
+    width: 50px;
+  }
+  .navbar .navbar-collapse {
+    margin-top: 10px;
+  }
+  .navbar .navbar-nav > .nav-item {
+    margin: 3px 0;
+  }
+
+  #myCarousel img {
+    height: 300px;
+    object-fit: cover;
+  }
+  #carouselExampleCaptions img{
+    height: 200px;
+  }
+  .social-wrap img{
+    height: 200px;
+  }
+}
+@media (min-width: 768px) {
+  .social-wrap img{
+    height: 120px;
+  }
 }
