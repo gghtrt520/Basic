@@ -15,6 +15,7 @@ function getContent(id){
     $(".content-list-wrap").hide()
     $(".message-wrap").hide()
     $(".article-wrap").show()
+    
     $.ajax({
         type: "post",
         data: {id: id},
@@ -23,7 +24,6 @@ function getContent(id){
             if(result.code == 0){
                 getMenu(result.data.menu_id)
                 $(".article-wrap").html(result.data.content)
-                // $(".breadcrumb .active").text(esult.data.label)
             }
         },
         error: function(e){
@@ -41,6 +41,8 @@ function getMenu(menuid){
             if(result.code == 0){
                 first = true
                 if(type != 1){
+
+                    $(".content-list-wrap").removeClass("d-none")
                     $(".content-list-wrap").show()
                     $(".article-wrap").hide()
                     $(".message-wrap").hide()
@@ -51,6 +53,11 @@ function getMenu(menuid){
                 page.pages = result.extend.pages
                 appendPageList(menuid)
                 initSpiritPagination(result.extend.pages,Math.ceil(+result.extend.pages/+page.pageSize),page.pageSize,page.current)
+                if(result.extend.pages<=page.pageSize){
+                    $(".page-wrap>span").hide();
+                }else{
+                    $(".page-wrap>span").show();
+                }
             }
         },
         error: function(e){
@@ -123,16 +130,9 @@ $(".btn-page-to").click(function(){
     getMenu(id)
 })
 
-
-$("body").on("click",".a-menu",function(){
-    localStorage.detailId = $(this).attr("data-id")
-    id = $(this).attr("data-id")
-    localStorage.detailType = 3
-    type = 3
-})
-
 $(".message").click(function(){
-    $(".content-list-wrap").hide()
+    $("#menu-second-select").hide();
+    $(".content-list-wrap").addClass("d-none")
     $(".article-wrap").hide()
     $(".message-wrap").show()
     $(".title-name").text("留言")
