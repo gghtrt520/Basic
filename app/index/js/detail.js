@@ -110,6 +110,9 @@ $("#content-list").on("click",".list-group-item",function(){
 })
 
 $(".btn-page-to").click(function(){
+    if(+$("#page-input-val").val()>Math.ceil(+page.pages/+page.pageSize) || +$("#page-input-val").val()<1){
+        return false;
+    }
     page.current = $("#page-input-val").val()
     getMenu(id)
 })

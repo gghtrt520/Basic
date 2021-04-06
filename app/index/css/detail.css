@@ -231,4 +231,7 @@
     .pagination-info{
         display: none;
     }
+    .page-item.active .page-link{
+        color: #d42d26;
+    }
 }
