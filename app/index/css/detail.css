@@ -163,6 +163,34 @@
     background-color: #d42d26;
     border-color: #d42d26;
 }
+
+
+
+
+/* message */
+.message-wrap{
+    display: none;
+    padding:20px;
+}
+.message-wrap label{
+    color: #d42d26;
+    text-align-last: justify;
+}
+.message-wrap label.must::after{
+    content: "*";
+    color: #d42d26;
+    position: absolute;
+}
+.message-wrap .form-control:focus{
+    border-color: #d42d26;
+    box-shadow: 0 0 5px #d42d26;
+}
+.message-wrap button{
+    border-radius: 0;
+    padding: 2px 15px;
+    font-size: 13px;
+}
+
 @media (max-width: 768px) {
     .link-title-detail{
         background:#d42d26;

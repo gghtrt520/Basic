@@ -12,9 +12,9 @@ return [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=basic',
+            'dsn' => 'mysql:host=mysql;dbname=basic',
             'username' => 'root',
-            'password' => '',
+            'password' => '123456',
             'charset' => 'utf8',
         ],        
     ],
