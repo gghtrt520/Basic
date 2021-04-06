@@ -42,4 +42,19 @@ class FrontendController extends \apiadmin\modules\v1\controllers\BaseController
             return $this->setError('数据未找到');
         }
     }
+
+    public function actionDetail()
+    {
+        $menu_id = Yii::$app->request->get('menu_id');
+        $menu    = \apiadmin\modules\models\setting\Menu::findOne($menu_id);
+        if($menu){
+            $data['menu'] = $menu->getMenu();
+            $content      = new  \apiadmin\modules\models\content\Content();
+            $data['content'] = $content->searchModel($this->pages);
+            return $this->setSuccess($data);
+        }else {
+            return $this->setError('数据未找到');
+        }
+
+    }
 }

@@ -111,4 +111,25 @@ class Menu extends \common\models\Base
     {
         return $this->hasMany(\apiadmin\modules\models\content\Content::className(),['menu_id'=>'id'])->limit(10);
     }
+
+    public function getMenu()
+    {
+        if($this->parent_id == 0){
+            $data['id']         = $this->id;
+            $data['label']      = $this->name;
+            $data['parent_id']  = $this->parent_id;
+            $data['path']       = $this->path;
+            $data['sort']       = $this->sort;
+            $data['children']   = $this->getSubMenu();
+        }else{
+            $parent             = self::findOne($this->parent_id);
+            $data['id']         = $parent->id;
+            $data['label']      = $parent->name;
+            $data['parent_id']  = $parent->parent_id;
+            $data['path']       = $parent->path;
+            $data['sort']       = $parent->sort;
+            $data['children']   = $parent->getSubMenu();
+        }
+        return $data;
+    }
 }
