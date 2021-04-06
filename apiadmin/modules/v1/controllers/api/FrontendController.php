@@ -34,7 +34,7 @@ class FrontendController extends \apiadmin\modules\v1\controllers\BaseController
 
     public function actionContent()
     {
-        $id = Yii::$app->request->get('id');
+        $id = Yii::$app->request->post('id');
         if($content = \apiadmin\modules\models\content\Content::findOne($id)){
             $content->updateCounters(['times' => 1]);
             return $this->setSuccess($content);
