@@ -300,6 +300,9 @@ footer > div > p {
 .carousel-control-prev {
   z-index: 1;
 }
+.iconfont.icon-xindiantu{
+  font-size: 30px;
+}
 
 @media (max-width: 992px) {
   body {

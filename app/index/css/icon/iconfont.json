@@ -1,0 +1,44 @@
+{
+  "id": "2453057",
+  "name": "能源投资官网",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "15223948",
+      "name": "留言",
+      "font_class": "liuyan",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "15282909",
+      "name": "心电图",
+      "font_class": "xindiantu",
+      "unicode": "e6f4",
+      "unicode_decimal": 59124
+    },
+    {
+      "icon_id": "13990886",
+      "name": "map",
+      "font_class": "map",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "14772865",
+      "name": "play circle-fill",
+      "font_class": "playcircle-fill",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "20075863",
+      "name": "双箭头",
+      "font_class": "double-arrow",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    }
+  ]
+}

@@ -22,17 +22,18 @@
 }
 .content-wrap{
     border:1px solid rgba(0,0,0,.125);
+    height:100%;
 }
 .content-title{
     position: relative;
-    padding: .75rem 1.25rem;
+    padding: .75rem .85rem;
 }
 .content-title .title-icon {
     position: absolute;
     top:0;bottom:0;
     margin:auto;
     width:4px;
-    height:60%;
+    height:50%;
     background:#d42d26;
     display: inline-block;
 }
@@ -64,22 +65,103 @@
     margin: 0 10px;
     padding: 10px 0;
 }
+.list-group-item:hover{
+    color: #d42d26;
+    cursor: pointer;
+}
+
+.list-group-item.active{
+    color: #d42d26;
+    background-color: #fff;
+    border-color: rgba(0,0,0,.125);
+    cursor: default;
+}
+
+.article-wrap{
+    height:100%;
+    display: none;
+    padding:10px 15px;
+}
+
 .page-wrap{
     font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 .my-page{
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .my-page .page-link{
     color:#000;
     padding: .4rem .75rem;
-    border-radius:.25rem;
+    border-radius:.0rem !important;
     margin:0 5px;
     background:#f3f3f3;
 }
 .my-page .page-link:hover{
     background:#d42d26;
     color:#fff;
+}
+.btn-page-to{
+    border-radius: 0;
+    background: #f3f3f3;
+    color: #d42d26;
+    font-size: 12px;
+    margin-right: 5px;
+    border: 1px solid #dee2e6;
+    padding: .4rem .75rem;
+    line-height: 1.25;
+}
+.footer-img-wrap{
+    display: flex;
+    justify-content: space-between;
+}
+.footer-img-wrap>*{
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    width: 80px;
+    height:80px;
+}
+.qrcode-img{
+    border: 5px solid rgba(0, 0, 0, .1);
+}
+.footer-visit{
+    font-size: 14px;
+    text-align: right;
+}
+.footer-visit>div:first-child{
+    padding-top:25px;
+}
+.message{
+    background: rgba(0, 0, 0, .1);
+}
+.message:hover{
+    cursor: pointer;
+    background: rgba(0, 0, 0, .4);
+}
+.message>div{
+    margin-top: -10px;
+    font-size: 12px;
+}
+.message i{
+    font-size: 2.5rem;
+}
+
+.pagination{
+    margin:0;
+}
+.pagination-info{
+    margin-right:10px;
+}
+.page-item.active .page-link{
+    background-color: #d42d26;
+    border-color: #d42d26;
 }
 @media (max-width: 768px) {
     .link-title-detail{
@@ -97,5 +179,28 @@
     
     #menu-second-select{
         display: inline;
+    }
+    .footer-visit>div:first-child{
+        padding-top:0;
+    }
+    .pagination a{
+        padding:0 !important;
+        background:none !important;
+        border:none;
+    }
+    .my-page .page-link:hover{
+        color:#d42d26;
+    }
+    .btn-page-to{
+        padding:0 !important;
+        background:none !important;
+        border:none;
+    }
+    .btn-page-to:hover{
+        color: #d42d26;
+        opacity: .8;
+    }
+    .pagination-info{
+        display: none;
     }
 }

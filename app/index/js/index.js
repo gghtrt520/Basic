@@ -37,6 +37,7 @@ function calculateMA(dayCount, data) {
     return result;
 }
 
+//Echarts加载json文件 stock-DJI.json 的加数据
 $.ajax({
     url: "js/stock-DJI.json",
     type: "GET",
@@ -262,6 +263,7 @@ window.onresize = function () {
     myChart?myChart.resize():'';
 }
 
+//获取菜单和页面数据
 $.ajax({
     type: "get",
     jsonp: "callback",
@@ -276,12 +278,12 @@ $.ajax({
                         <div class="dropdown-menu" aria-labelledby="menu-parent${i}">`;
                     appendsCenter(result.data[i]);
                     for(let j = 0;j<result.data[i].children.length;j++){
-                        html+=`<a class="dropdown-item" href="#">${result.data[i].children[j].label}</a>`
+                        html+=`<a class="dropdown-item a-menu" data-id="${result.data[i].children[j].id}" href="#">${result.data[i].children[j].label}</a>`
                         appendsCenter(result.data[i].children[j]);
                     }
                     html+=`</div></li>`
                 }else{
-                    html += `<li class="nav-item"><a class="nav-link" href="#">${result.data[i].label}</a></li>`
+                    html += `<li class="nav-item"><a class="nav-link" href="${result.data[i].label == '网站首页' ? 'index.html':'#'}">${result.data[i].label}</a></li>`
                 }
             }
             $("#indexNavbars>.navbar-nav").html(html);
@@ -293,6 +295,8 @@ $.ajax({
     }
 });
 
+
+//获取轮播图数据
 $.ajax({
     type: "post",
     data: {loop_banner_id: 1},
@@ -304,7 +308,7 @@ $.ajax({
             let length = result.data.length>4?4:result.data.length;
             for(let i = 0;i<length;i++){
                 html+=`<li data-target="#myCarousel" data-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></li>`;
-                html2+=`<div class="carousel-item a-href${i === 0 ? ' active' : ''}" data-id="${result.data[i].id}">
+                html2+=`<div class="carousel-item ${i === 0 ? ' active' : ''}" data-id="${result.data[i].id}">
                     <img src="${result.data[i].url}" class="d-block w-100">
                 </div>`
             }
@@ -321,13 +325,21 @@ $.ajax({
 function appendsCenter(data){
     switch(data.label){
         case '今日导读':appendToday(data.content);break;
-        case '新闻中心':newsCenter(flatRandom(data));break;
+        case '新闻中心':newsCenter(flatRandom(data));
+                      $(".btn-more-news").attr("data-id",data.id);
+                      break;
         case '公司新闻':newsCenterMenu(data.content,'公司新闻');break;
         case '基层动态':newsCenterMenu(data.content,'基层动态');break;
         case '通知公告':newsCenterMenu(data.content,'通知公告');break;
         case '招标公告':newsCenterMenu(data.content,'招标公告');break;
-        case '安全生产':safetyProduction(flatRandom(data));break;
+        case '安全生产':safetyProduction(flatRandom(data));
+                      $(".btn-more-safe").attr("data-id",data.id);
+                      break;
+        case '投资者关系':$(".btn-more-invest").attr("data-id",data.id);break;
         case '社会责任':social(flatRandom(data));break;
+        case '经营管理':$(".center-nav1").attr("data-id",data.id);break;
+        case '党群工作':$(".center-nav2").attr("data-id",data.id);break;
+        case '企业文化':$(".center-nav3").attr("data-id",data.id);break;
     }
 }
 
@@ -403,7 +415,7 @@ function safetyProduction(data){
     let length = data.length>2?2:data.length;
     for(let i = 0;i<length;i++){
         html+=`<div class="col-md-6">
-            <div class="card mb-4 shadow-sm">
+            <div class="card mb-4 shadow-sm a-href" data-id="${data[i].id}">
                 <img src="${data[i].image}" alt="">
                 <div class="card-body">
                     <h6 class="card-title">${data[i].title}</h6>
@@ -424,7 +436,7 @@ function social(data){
     let length = data.length>3?3:data.length;
     for(let i = 0;i<length;i++){
         html+=`<div class="col-md-4">
-            <div class="card text-center mb-4 shadow-sm">
+            <div class="card text-center mb-4 shadow-sm a-href" data-id="${data[i].id}">
             <img src="${data[i].image}" alt="">
             <div class="card-body">
                 <h7 class="text-danger">${data[i].title}</h7>
@@ -441,7 +453,7 @@ function flatRandom(parentData){
     if(parentData.content.length){
         datas = parentData.content;
     } else {
-        datas = shuffle([parentData.children[0].content,parentData.children[1].content].flat(Infinity));
+        datas = shuffle([parentData.children?parentData.children[0].content:[],parentData.children?parentData.children[1].content:[]].flat(Infinity));
     }
     return datas;
 }
@@ -453,3 +465,24 @@ function shuffle(arr) {
     }
     return arr;
 }
+
+//文章跳转
+$("#main-wrap").on("click",".a-href",function(){
+    localStorage.detailId = $(this).attr("data-id")
+    localStorage.detailType = 1
+    location.href = "detail.html"
+})
+
+//更多跳转
+$("#main-wrap").on("click",".btn-more",function(){
+    localStorage.detailId = $(this).attr("data-id")
+    localStorage.detailType = 2
+    location.href = "detail.html"
+})
+
+//菜单跳转
+$("body").on("click",".a-menu",function(){
+    localStorage.detailId = $(this).attr("data-id")
+    localStorage.detailType = 3
+    location.href = "detail.html"
+})
