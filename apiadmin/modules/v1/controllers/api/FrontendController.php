@@ -45,7 +45,7 @@ class FrontendController extends \apiadmin\modules\v1\controllers\BaseController
 
     public function actionDetail()
     {
-        $menu_id = Yii::$app->request->get('menu_id');
+        $menu_id = Yii::$app->request->post('menu_id');
         $menu    = \apiadmin\modules\models\setting\Menu::findOne($menu_id);
         if($menu){
             $data['menu'] = $menu->getMenu();
