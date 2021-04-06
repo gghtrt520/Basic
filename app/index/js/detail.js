@@ -70,7 +70,7 @@ function appendPageList(id){
     let contentList = '';
     let menuCildren = data.menu.children;
     for(let i = 0;i<menuCildren.length;i++){
-        secondSelect+=`<option value="${menuCildren[i].id}">${menuCildren[i].label}</option>`
+        secondSelect+=`<option ${menuCildren[i].id == id ? 'selected':''} value="${menuCildren[i].id}">${menuCildren[i].label}</option>`
         secondList+=`<li class="list-group-item${menuCildren[i].id == id ? ' active' : ''}" data-id="${menuCildren[i].id}"><i class="iconfont icon-double-arrow"></i><span>${menuCildren[i].label}</span</li>`
         if((id && id == menuCildren[i].id)){
             for(let j = 0;j<data.content.length;j++){
@@ -97,7 +97,13 @@ $("#menu-second-list").on("click",".list-group-item",function(){
     id = $(this).attr("data-id")
     localStorage.detailId = $(this).attr("data-id")
     getMenu($(this).attr("data-id"))
-
+})
+$("#menu-second-select").change(function(){
+    type = 3
+    localStorage.detailType = 3
+    id = $(this).val()
+    localStorage.detailId = $(this).val()
+    getMenu($(this).val())
 })
 
 
