@@ -292,11 +292,11 @@ $.ajax({
 
             let bhtml = '';
             let bhtml2 = '';
-            let length = result.extend.banner.length>4?4:result.extend.banner.length;
+            let length = result.extend.banner[0].banner.length>4?4:result.extend.banner[0].banner.length;
             for(let i = 0;i<length;i++){
                 bhtml+=`<li data-target="#myCarousel" data-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></li>`;
-                bhtml2+=`<div class="carousel-item ${i === 0 ? ' active' : ''}" data-id="${result.extend.banner[i].id}">
-                    <img src="${result.extend.banner[i].url}" class="d-block w-100">
+                bhtml2+=`<div class="carousel-item ${i === 0 ? ' active' : ''}" data-id="${result.extend.banner[0].banner[i].id}">
+                    <img src="${result.extend.banner[0].banner[i].url}" class="d-block w-100">
                 </div>`
             }
             $("#myCarousel .carousel-indicators").html(bhtml);
