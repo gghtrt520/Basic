@@ -247,8 +247,9 @@ header {
   object-fit: cover;
 }
 .safety-production .card-text{
-  height: 80px;
+  height: 75px;
   font-size: 12px;
+  overflow: hidden;
 }
 footer {
   background-color: #d42d26;
@@ -270,8 +271,8 @@ footer > div > p {
 .title-line{
   height: 1px;
   flex: auto;
-  margin: 0 10px;
-  border-top: 1px solid #ccc;
+  margin-left: 10px;
+  border-top: 2px solid #ccc;
 }
 .btn-more{
   font-size: 12px;
@@ -300,6 +301,15 @@ footer > div > p {
 .carousel-control-prev {
   z-index: 1;
 }
+.model-title .iconfont.icon-xindiantu{
+  font-size: 20px;
+  color: #ccc;
+  position: relative;
+  top: -2px;
+  font-weight: 600;
+  left: -1px;
+  margin-right: 20px;
+}
 .iconfont.icon-xindiantu{
   font-size: 30px;
 }
@@ -317,6 +327,11 @@ footer > div > p {
   font-size: 12px;
   text-align: center;
   border-radius: 1px;
+}
+.card-title{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 @media (max-width: 992px) {

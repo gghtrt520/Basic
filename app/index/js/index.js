@@ -274,7 +274,7 @@ $.ajax({
             visitNumberErgodic($(".visit-curr"),result.extend.times.today)
             visitNumberErgodic($(".visit-total"),result.extend.times.all)
             for(let i = 0;i<result.data.length;i++){
-                if(result.data[i].children && result.data[i].children.length>0){
+                if(result.data[i].children && result.data[i].children.length>0 && result.data[i].label != '网站首页'){
                     html+=`<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="menu-parent${i}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${result.data[i].label}</a>
                         <div class="dropdown-menu" aria-labelledby="menu-parent${i}">`;
@@ -286,6 +286,14 @@ $.ajax({
                     html+=`</div></li>`
                 }else{
                     html += `<li class="nav-item"><a class="nav-link" href="${result.data[i].label == '网站首页' ? 'index.html':'#'}">${result.data[i].label}</a></li>`
+                    if(result.data[i].label == '网站首页'){
+                        let len = result.data[i].children.length;
+                        for(let r = 0;r<len;r++){
+                            if(result.data[i].children[r].label == "今日导读"){
+                                appendsCenter(result.data[i].children[r])
+                            }
+                        }
+                    }
                 }
             }
             $("#indexNavbars>.navbar-nav").html(html);
