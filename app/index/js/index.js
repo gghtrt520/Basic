@@ -271,6 +271,8 @@ $.ajax({
     success: function(result) {
         let html = '';
         if(result.code == 0 && result.data.length>0){
+            visitNumberErgodic($(".visit-curr"),result.extend.times.today)
+            visitNumberErgodic($(".visit-total"),result.extend.times.all)
             for(let i = 0;i<result.data.length;i++){
                 if(result.data[i].children && result.data[i].children.length>0){
                     html+=`<li class="nav-item dropdown">
@@ -287,33 +289,18 @@ $.ajax({
                 }
             }
             $("#indexNavbars>.navbar-nav").html(html);
-        }
-    },
-    error: function(e){
-        console.log(e.status);
-        console.log(e.responseText);
-    }
-});
 
-
-//获取轮播图数据
-$.ajax({
-    type: "post",
-    data: {loop_banner_id: 1},
-    url: "http://localhost/v1/setting/banner-list/list",
-    success: function(result) {
-        if(result.code == 0 && result.data.length>0){
-            let html = '';
-            let html2 = '';
-            let length = result.data.length>4?4:result.data.length;
+            let bhtml = '';
+            let bhtml2 = '';
+            let length = result.extend.banner.length>4?4:result.extend.banner.length;
             for(let i = 0;i<length;i++){
-                html+=`<li data-target="#myCarousel" data-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></li>`;
-                html2+=`<div class="carousel-item ${i === 0 ? ' active' : ''}" data-id="${result.data[i].id}">
-                    <img src="${result.data[i].url}" class="d-block w-100">
+                bhtml+=`<li data-target="#myCarousel" data-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></li>`;
+                bhtml2+=`<div class="carousel-item ${i === 0 ? ' active' : ''}" data-id="${result.extend.banner[i].id}">
+                    <img src="${result.extend.banner[i].url}" class="d-block w-100">
                 </div>`
             }
-            $("#myCarousel .carousel-indicators").html(html);
-            $("#myCarousel .carousel-inner").html(html2)
+            $("#myCarousel .carousel-indicators").html(bhtml);
+            $("#myCarousel .carousel-inner").html(bhtml2)
         }
     },
     error: function(e){
@@ -446,6 +433,16 @@ function social(data){
         </div>`;
     }
     $(".social-wrap").html(html)
+}
+
+function visitNumberErgodic(el,str){
+    let arr = String(str).split("")
+    let arrLen = arr.length-1;
+    let spanLen =  el.find("span").length-1;
+    for(let i = arrLen;i > -1;i--){
+        el.find("span").eq(spanLen--).text(arr[i])
+        console.log(spanLen)
+    }
 }
 
 function flatRandom(parentData){

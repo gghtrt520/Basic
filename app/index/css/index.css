@@ -303,6 +303,21 @@ footer > div > p {
 .iconfont.icon-xindiantu{
   font-size: 30px;
 }
+.visit-wrap{
+  display: flex;
+  align-items: center;
+}
+.visit-wrap span{
+  display: inline-block;
+  width: 12px;
+  height: 16px;
+  background: #fff;
+  margin: 0 1px;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 1px;
+}
 
 @media (max-width: 992px) {
   body {

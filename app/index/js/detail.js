@@ -87,6 +87,9 @@ function appendPageList(id){
                     <span class="float-right text-secondary">${menuCildren[i].content[j].create_time}</span>
                 </li>`
             }
+            if(data.content.length == 0){
+                contentList=`<div class="text-center mt-5">暂无数据</div>`
+            }
         }
     }
     $("#menu-second-select").html(secondSelect)
