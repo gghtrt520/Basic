@@ -309,6 +309,33 @@ $.ajax({
             }
             $("#myCarousel .carousel-indicators").html(bhtml);
             $("#myCarousel .carousel-inner").html(bhtml2)
+
+            let linkLength = result.extend.link.length;
+            $(".select-wrap").html("");
+            for(let l = 0;l<linkLength;l++){
+                let linkHtml=`<select class="${l == 0 ? 'first-select' : ''}" name="" id="">
+                <option value="">${result.extend.link[l].category}</option>`
+                
+                let linkHtml2 = ''
+                for(let i = 0;i<result.extend.link[l].link.length;i++){
+                    linkHtml2 +=`<option value="${result.extend.link[l].link[i].href}">${result.extend.link[l].link[i].name}</option>`
+                }
+                linkHtml +=`${linkHtml2}</select>`
+                $(".select-wrap").append(linkHtml)
+            }
+            $(".detail-select-wrap").remove();
+            for(let l = 0;l<linkLength;l++){
+                let detaillinkHtml=`<div class="col-md-2 col-6 detail-select-wrap">
+                <select class="first-select">
+                <option value="">${result.extend.link[l].category}</option>`
+                
+                let detaillinkHtml2 = ''
+                for(let i = 0;i<result.extend.link[l].link.length;i++){
+                    detaillinkHtml2 +=`<option value="${result.extend.link[l].link[i].href}">${result.extend.link[l].link[i].name}</option>`
+                }
+                detaillinkHtml +=`${detaillinkHtml2}</select></div>`
+                $(".link-wrap").append(detaillinkHtml)
+            }
         }
     },
     error: function(e){
@@ -331,7 +358,7 @@ function appendsCenter(data){
                       $(".btn-more-safe").attr("data-id",data.id);
                       break;
         case '投资者关系':$(".btn-more-invest").attr("data-id",data.id);break;
-        case '社会责任':social(flatRandom(data));break;
+        case '社会责任':$(".btn-more-society").attr("data-id",data.id);social(flatRandom(data));break;
         case '经营管理':$(".center-nav1").attr("data-id",data.id);break;
         case '党群工作':$(".center-nav2").attr("data-id",data.id);break;
         case '企业文化':$(".center-nav3").attr("data-id",data.id);break;
@@ -490,4 +517,9 @@ $("body").on("click",".a-menu",function(){
     localStorage.detailId = $(this).attr("data-id")
     localStorage.detailType = 3
     location.href = "detail.html"
+})
+
+//友情链接跳转
+$(".links-box,.link-wrap").on("change","select",function(){
+    this.value?window.open(this.value):''
 })
